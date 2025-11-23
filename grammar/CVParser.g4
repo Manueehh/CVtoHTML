@@ -1,0 +1,75 @@
+parser grammar CVParser;
+
+options { tokenVocab = LexerPersona;}
+
+cv_grupo: global cv+;
+global: GLOBAL_KW LLAVE_ABRE variable+ LLAVE_CIERRA;
+variable: IDENTIFICADOR IGUAL CADENA PUNTO_Y_COMA;
+cv: CV_KW LLAVE_ABRE IDENTIFICADOR informacion_personal formacion experiencia? habilidades idiomas portfolio? LLAVE_CIERRA; 
+// BLLOQUE INFO
+informacion_personal: SECCION_KW PAREN_ABRE INFO_PERSONA_KW PAREN_CIERRA LLAVE_ABRE persona_decl enlaces? imagen_perfil? imagen_fondo? LLAVE_CIERRA;
+persona_decl: PERSONA_KW PAREN_ABRE campos_persona PAREN_CIERRA;
+campos_persona: nombre puesto ubicacion email telefono (fecha_nacimiento|edad)?;
+nombre: NOMBRE_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+puesto: PUESTO_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+ubicacion: UBICACION_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+email: EMAIL_KW DOS_PUNTOS CORREO PUNTO_Y_COMA;
+telefono: TELEFONO_KW DOS_PUNTOS TELEFONO_VALOR PUNTO_Y_COMA;
+fecha_nacimiento: FECHA_NACIMIMENTO_KW DOS_PUNTOS FECHA PUNTO_Y_COMA;
+edad: EDAD_KW DOS_PUNTOS EDAD_VALOR PUNTO_Y_COMA;
+imagen_perfil: IMAGEN_DE_PERFIL_KW DOS_PUNTOS URL PUNTO_Y_COMA;
+imagen_fondo: IMAGEN_DE_FONDO_KW DOS_PUNTOS URL PUNTO_Y_COMA;
+enlaces: ENLACES_KW DOS_PUNTOS URL (COMA URL)* PUNTO_Y_COMA;
+
+// BLOQUE FORMACION
+formacion: SECCION_KW PAREN_ABRE FORMACION_KW PAREN_CIERRA LLAVE_ABRE oficial+ complementaria? LLAVE_CIERRA;
+oficial: OFICIAL_KW PAREN_ABRE titulo centro facultad? añofinal planestudio? PAREN_CIERRA;
+centro: CENTRO_KW DOS_PUNTOS (CADENA|URL) PUNTO_Y_COMA;
+añofinal : AÑO_KW DOS_PUNTOS AÑO PUNTO_Y_COMA;
+titulo: TITULO_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+planestudio: PLAN_DE_ESTUDIOS_KW DOS_PUNTOS (CADENA|URL) PUNTO_Y_COMA;
+facultad: FACULTAD_KW DOS_PUNTOS (CADENA|URL) PUNTO_Y_COMA;
+complementaria: COMPLEMENTARIA_KW PAREN_ABRE titulo centro horas? descripcion? añofinal? certificado? PAREN_CIERRA;
+horas: HORAS_KW DOS_PUNTOS DIGITOS PUNTO_Y_COMA;
+descripcion: DESCRIPCION_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+certificado: CERTIFICADO_KW DOS_PUNTOS CERTIFICADO_VALOR PUNTO_Y_COMA;
+
+// BLOQUE EXPERIENCIA
+experiencia: SECCION_KW PAREN_ABRE EXPERIENCIA_KW PAREN_CIERRA LLAVE_ABRE experiencias LLAVE_CIERRA;
+experiencias: experiencia_item+;
+experiencia_item: TRABAJO_KW PAREN_ABRE empresa puesto ubicacion periodo jornada? descripcion? responsabilidades? logros? tecnologias? PAREN_CIERRA;
+empresa: EMPRESA_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+periodo: PERIODO_KW DOS_PUNTOS rango_fechas PUNTO_Y_COMA;
+rango_fechas: FECHA FLECHA (FECHA|ACTUALIDAD_KW);
+jornada: JORNADA_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+responsabilidades: RESPONSABILIDADES_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+logros: LOGROS_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+// BLOQUE HABILIDADES
+habilidades: SECCION_KW PAREN_ABRE HABILIDADES_KW PAREN_CIERRA LLAVE_ABRE habilidades_campos LLAVE_CIERRA;
+habilidades_campos: HARD_SKILLS_KW PAREN_ABRE hard_skill+ PAREN_CIERRA SOFT_SKILLS_KW PAREN_ABRE soft_skill+ PAREN_CIERRA;
+hard_skill: lenguaje icono? descripcion? nivel_habilidad;
+soft_skill: HABILIDAD_KW DOS_PUNTOS habilidad_lista PUNTO_Y_COMA;
+habilidad_lista: habilidad (COMA habilidad)*;
+lenguaje: tecnologia;
+icono: ICONO_KW DOS_PUNTOS URL PUNTO_Y_COMA;
+nivel_habilidad: NIVEL_KW DOS_PUNTOS NIVEL_HABILIDAD_TIPO PUNTO_Y_COMA;
+habilidad: HABILIDAD_TIPO;
+
+// BLOQUE IDIOMAS
+idiomas: SECCION_KW PAREN_ABRE IDIOMA_KW PAREN_CIERRA LLAVE_ABRE idioma LLAVE_CIERRA;
+idioma: idioma_campos+;
+idioma_campos: dialecto nivel_idioma certificado? bandera?;
+dialecto: DIALECTO_KW DOS_PUNTOS DIALECTO_TIPO PUNTO_Y_COMA;
+nivel_idioma: NIVEL_KW DOS_PUNTOS NIVEL_IDIOMA_TIPO PUNTO_Y_COMA;
+bandera: BANDERA_KW DOS_PUNTOS URL PUNTO_Y_COMA;
+
+// BLOQUE PORTFOLIO
+portfolio: SECCION_KW PAREN_ABRE PORTFOLIO_KW PAREN_CIERRA LLAVE_ABRE bportfolio LLAVE_CIERRA;
+bportfolio: proyecto+;
+proyecto: PROYECTO_KW PAREN_ABRE nombre descripcion tdesarrollo tecnologias rol estado enlaces? PAREN_CIERRA;
+tdesarrollo: TIEMPO_DE_DESARROLLO_KW DOS_PUNTOS TDESARROLLO_VALOR PUNTO_Y_COMA;
+rol: ROL_KW DOS_PUNTOS ROL_TIPO PUNTO_Y_COMA;
+estado: ESTADO_KW DOS_PUNTOS ESTADO_TIPO PUNTO_Y_COMA;
+tecnologias: TECNOLOGIAS_KW DOS_PUNTOS tecnologia+;
+tecnologia: TEC_TIPO DOS_PUNTOS CADENA PUNTO_Y_COMA;

@@ -1,0 +1,21 @@
+# Archivos compilados
+bin/
+*.class
+
+# Archivos generados por ANTLR
+generated/
+
+# Archivos de salida
+data/salida.txt
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

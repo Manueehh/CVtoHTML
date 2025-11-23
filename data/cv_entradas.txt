@@ -1,0 +1,227 @@
+Global {
+	ESI = "Escuela Superior de Informática";
+	UCLM = "Universidad de Castilla-La Mancha";
+	CIU = "Ciudad Real";
+}
+
+
+// ==========================
+// CV RUBÉN
+// ==========================
+
+CV { 
+    CVRUBEN
+    /* Comentario multilínea CV */
+    seccion(Información_personal) {
+        Persona(
+            Nombre: "Rubén Alaminos";
+            Puesto: "Estudiante";
+            Ubicacion: "Ciudad Real";
+            Email: rurru01@gmail.com;
+            Telefono: 664607168;
+            Edad: 25;
+        )
+        Enlaces: http://www.instagram.com/ruru , http://x.com/ruru;
+    }
+    Seccion(Formacion) {
+        Oficial(
+            Titulo: "Técnico superior DAM";
+            Centro: "IES Leonardo Da Vinci";
+            Facultad: "Universidad de Castilla-La Mancha";
+            Año: 2021;
+        )
+        Complementaria(
+            Titulo: "Curso de Python";
+            Centro: "Edutin Academy";
+            Descripcion: "Este curso de Python está dirigido a estudiantes y profesionales de ingeniería de sistemas, software, ciencias de la computación y áreas afines, interesados en desarrollar habilidades de programación con Python para aplicaciones web, automatización, análisis de datos, inteligencia artificial y más.";
+            Certificado: SI;
+        )
+    }
+    Seccion(Experiencia) {
+        Trabajo(
+            Empresa: "Expertic";
+            Puesto: "Becario de prácticas";
+            Ubicacion: "Albacete";
+            Periodo: 10-09-2020 -> 22-12-2020;
+            Jornada: "Prácticas";
+            Descripcion: "Desarrollo de aplicaciones multiplataforma y páginas web";
+            Tecnologias: Lenguaje_prog: "Java"; IDE: "Word Press"; Control_de_versiones: "Git"; BBDD: "MySql";
+        )
+        Trabajo(
+            Empresa: "Intelier";
+            Puesto: "Jefe de sala";
+            Ubicacion: "Alcázar de San Juan";
+            Periodo: 01-06-2020 -> Actualidad;
+            Jornada: "Fijo discontinuo";
+            Descripcion: "Organización y responsable de un equipo encargado de la realización de eventos";
+        )
+    }
+    Seccion(Habilidades) {
+        Hard_skills(
+            Lenguaje_prog: "Python";
+            Icono: https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg;
+            Nivel: Medio;
+            Lenguaje_prog: "Java";
+            Nivel: Avanzado;
+        )
+        Soft_skills(
+            Habilidad: Liderazgo, Trabajo_en_equipo, Resiliencia, Trabajo_bajo_presion, Toma_de_decisiones, Compromiso;
+        )
+    }
+    Seccion(Idiomas) {
+        Dialecto: Ingles;
+        Nivel: B1;
+        Certificado: SI;
+        Bandera: https://es.wikipedia.org/wiki/Bandera_del_Reino_Unido#/media/Archivo:Flag_of_the_United_Kingdom_(1-2).svg;
+        Dialecto: Alemán;
+        Nivel: B1;
+        Certificado: NO;
+        Dialecto: Español;
+        Nivel: C2;
+        Certificado: SI;
+    }
+    Seccion(Portfolio) {
+        Proyecto(
+            Nombre: "Web Arcos";
+            Descripcion: "Proyecto llevado a cabo en la empresa Expertic sobre el desarrollo de la web de la empresa Arcos";
+            Tiempo_de_desarrollo: 120_horas;
+            Tecnologias: Lenguaje_prog: "html"; IDE: "WordPress";
+            Rol: Desarrollo;
+            Estado: Finalizado;
+            Enlaces: http://www.alarcos.com, http://urlprueba.com;
+        )
+    }
+}
+
+// ==========================
+// CV MANUEL
+// ==========================
+CV { 
+    CVMANUEL
+    /* Comentario multilínea CV 1 */
+    seccion(Información_personal) {
+        Persona(
+            Nombre: "Manuel Avilés";
+            Puesto: "Estudiante";
+            Ubicación: "Ciudad Real";
+            Email: manuelaviles1512@gmail.com;
+            Teléfono: 619276132;
+            Edad: 24;
+        )
+    }
+    Seccion(Formación) {
+        Oficial(
+            Título: "Bachillerato";
+            Centro: "IES Miguel de Cervantes";
+            Facultad: "Escuela Superior de Informática";
+            Año: 2025;
+            Plan_de_estudios: https://esi.uclm.es/index.php/grado-en-ingenieria-informatica/plan-de-estudios;
+        )
+        Complementaria(
+            Título: "Machine Learning desde 0";
+            Centro: "Udemy";
+            Descripción: "Curso para aprender desde 0 Machine Learning en Python";
+            Certificado: NO;
+        )
+    }
+    Seccion(Experiencia) {
+        Trabajo(
+            Empresa: "Minsait INDRA";
+            Puesto: "Becario de prácticas";
+            Ubicación: "Ciudad Real";
+            Periodo: 01-10-2024 -> 22-12-2024;
+            Jornada: "Prácticas";
+            Descripcion: "Analisis de datos y trabajos en entornos CLOUD";
+            Tecnologias: Lenguaje_prog: "Scala"; IDE: "IntelliJ IDEA"; Control_de_versiones: "Git"; BBDD: "POSTGRES"; BBDD: "Impala";
+        )
+    }
+    Seccion(Habilidades) {
+        Hard_skills(
+            Lenguaje_prog: "Python";
+            Icono: https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg;
+            Nivel: Avanzado;
+            Lenguaje_prog: "Scala";
+            Nivel: Medio;
+        )
+        Soft_skills(
+            Habilidad: Comunicación_efectiva, Adaptabilidad, Empatía, Trabajo_bajo_presión, Autodisciplina, Compromiso;
+        )
+    }
+    Seccion(Idiomas) {
+        Dialecto: Inglés;
+        Nivel: B1;
+        Certificado: SI;
+        Bandera: https://es.wikipedia.org/wiki/Bandera_del_Reino_Unido#/media/Archivo:Flag_of_the_United_Kingdom_(1-2).svg;
+    }
+    Seccion(Portfolio) {
+        Proyecto(
+            Nombre: "Proyecto de Sistemas Inteligentes";
+            Descripción: "Proyecto llevado a cabo en la asignatura Sistemas Inteligentes del grado superior de Informática";
+            Tiempo_de_desarrollo: 20_horas;
+            Tecnologias: Lenguaje_prog: "Python"; IDE: "VSCode";
+            Rol: Desarrollo;
+            Estado: Finalizado;
+            Enlaces: https://enlace-de-ejemplo.com;
+        )
+    }
+}
+
+// ==========================
+// CV MIGUEL
+// ==========================
+
+CV {
+    CVMIguel
+
+    Seccion(Información_personal) {
+    Persona(
+        Nombre: "Miguel Marín Huertas";
+        Puesto: "Estudiante";
+        Ubicación: "Ciudad Real, España";
+        Email: miguelmh004@gmail.com;
+        Teléfono: 665432886;
+        Edad: 21;
+    )
+    }
+
+Seccion(Formación) {
+  Oficial(
+    Título: "Grado en Ingeniería Informática";
+    Centro: "Universidad de Castilla-La Mancha";
+    Año: 2026;
+  )
+  Complementaria(
+    Título: "Deep Learning with Python";
+    Centro: "O'Reilly";
+    Año: 2024;
+    Certificado: NO;
+  )
+}
+
+Seccion(Experiencia) {
+  Trabajo(
+    Empresa: "VISILAB (UCLM)";
+    Puesto: "Investigación en imágenes adversarias";
+    Ubicación: "Ciudad Real, España";
+    Periodo: 01-02-2025->31-07-2025;
+    Jornada: "Prácticas";
+    Descripción: "Generación y evaluación de imágenes adversarias (FGSM, PGD, CW-L2, Boundary, HSJ, Zoo) sobre arquitecturas CNN y Transformers.";
+    Tecnologias: Lenguaje_prog: "Python"; Frameworks: "PyTorch"; Control_de_versiones: "Git"; IDE: "VS Code"; SSOO: "Linux";
+  )
+}
+
+Seccion(Habilidades) {
+  Hard_skills(
+    Lenguaje_prog: "Python"; Nivel: Avanzado;
+    Lenguaje_prog: "Java"; Nivel: Medio;
+  )
+  Soft_skills(
+    Habilidad: Trabajo_en_equipo, Pensamiento_crítico;
+  )
+}
+
+Seccion(Idiomas) {
+  Dialecto: Español; Nivel: C2; Certificado: NO;
+  Dialecto: Inglés; Nivel: C1; Certificado: NO;
+}
+}
