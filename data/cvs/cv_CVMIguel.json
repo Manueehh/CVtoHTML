@@ -1,0 +1,101 @@
+{
+  "identificador": "CVMIguel",
+  "informacionPersonal": {
+    "nombre": "Miguel Marín Huertas",
+    "puesto": "Estudiante",
+    "ubicacion": "Ciudad Real, España",
+    "email": "miguelmh004@gmail.com",
+    "telefono": "665432886",
+    "edad": 21,
+    "enlaces": []
+  },
+  "formacion": {
+    "Oficial": [
+      {
+        "anoFinal": 2026,
+        "titulo": "Grado en Ingeniería Informática",
+        "centro": "Universidad de Castilla-La Mancha",
+        "tipo": "oficial"
+      }
+    ],
+    "Complementaria": [
+      {
+        "anoFinal": 2024,
+        "certificado": false,
+        "titulo": "Deep Learning with Python",
+        "centro": "O\u0027Reilly",
+        "tipo": "complementaria"
+      }
+    ]
+  },
+  "experiencia": [
+    {
+      "empresa": "VISILAB (UCLM)",
+      "puesto": "Investigación en imágenes adversarias",
+      "ubicacion": "Ciudad Real, España",
+      "periodo": {
+        "inicio": "01-02-2025",
+        "fin": "31-07-2025"
+      },
+      "jornada": "Prácticas",
+      "descripcion": "Generación y evaluación de imágenes adversarias (FGSM, PGD, CW-L2, Boundary, HSJ, Zoo) sobre arquitecturas CNN y Transformers.",
+      "tecnologias": [
+        {
+          "tipo": "Lenguaje_prog",
+          "valor": "Python"
+        },
+        {
+          "tipo": "Frameworks",
+          "valor": "PyTorch"
+        },
+        {
+          "tipo": "Control_de_versiones",
+          "valor": "Git"
+        },
+        {
+          "tipo": "IDE",
+          "valor": "VS Code"
+        },
+        {
+          "tipo": "SSOO",
+          "valor": "Linux"
+        }
+      ]
+    }
+  ],
+  "hardSkills": [
+    {
+      "lenguaje": {
+        "tipo": "Lenguaje_prog",
+        "valor": "Python"
+      },
+      "nivelHabilidad": "Avanzado"
+    },
+    {
+      "lenguaje": {
+        "tipo": "Lenguaje_prog",
+        "valor": "Java"
+      },
+      "nivelHabilidad": "Medio"
+    }
+  ],
+  "softSkills": {
+    "habilidades": [
+      "Trabajo_en_equipo",
+      "Pensamiento_crítico"
+    ]
+  },
+  "idiomas": [
+    {
+      "dialecto": "Español",
+      "nivel_idioma": "C2",
+      "certificado": false
+    },
+    {
+      "dialecto": "Inglés",
+      "nivel_idioma": "C1",
+      "certificado": false
+    }
+  ],
+  "portfolio": []
+}

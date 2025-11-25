@@ -1,0 +1,125 @@
+{
+  "identificador": "CVMANUEL",
+  "informacionPersonal": {
+    "nombre": "Manuel Avilés",
+    "puesto": "Estudiante",
+    "ubicacion": "Ciudad Real",
+    "email": "manuelaviles1512@gmail.com",
+    "telefono": "619276132",
+    "edad": 24,
+    "enlaces": []
+  },
+  "formacion": {
+    "Oficial": [
+      {
+        "facultad": "Escuela Superior de Informática",
+        "anoFinal": 2025,
+        "planEstudios": "https://esi.uclm.es/index.php/grado-en-ingenieria-informatica/plan-de-estudios",
+        "titulo": "Bachillerato",
+        "centro": "IES Miguel de Cervantes",
+        "tipo": "oficial"
+      }
+    ],
+    "Complementaria": [
+      {
+        "descripcion": "Curso para aprender desde 0 Machine Learning en Python",
+        "certificado": false,
+        "titulo": "Machine Learning desde 0",
+        "centro": "Udemy",
+        "tipo": "complementaria"
+      }
+    ]
+  },
+  "experiencia": [
+    {
+      "empresa": "Minsait INDRA",
+      "puesto": "Becario de prácticas",
+      "ubicacion": "Ciudad Real",
+      "periodo": {
+        "inicio": "01-10-2024",
+        "fin": "22-12-2024"
+      },
+      "jornada": "Prácticas",
+      "descripcion": "Analisis de datos y trabajos en entornos CLOUD",
+      "tecnologias": [
+        {
+          "tipo": "Lenguaje_prog",
+          "valor": "Scala"
+        },
+        {
+          "tipo": "IDE",
+          "valor": "IntelliJ IDEA"
+        },
+        {
+          "tipo": "Control_de_versiones",
+          "valor": "Git"
+        },
+        {
+          "tipo": "BBDD",
+          "valor": "POSTGRES"
+        },
+        {
+          "tipo": "BBDD",
+          "valor": "Impala"
+        }
+      ]
+    }
+  ],
+  "hardSkills": [
+    {
+      "lenguaje": {
+        "tipo": "Lenguaje_prog",
+        "valor": "Python"
+      },
+      "icono": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
+      "nivelHabilidad": "Avanzado"
+    },
+    {
+      "lenguaje": {
+        "tipo": "Lenguaje_prog",
+        "valor": "Scala"
+      },
+      "nivelHabilidad": "Medio"
+    }
+  ],
+  "softSkills": {
+    "habilidades": [
+      "Comunicación_efectiva",
+      "Adaptabilidad",
+      "Empatía",
+      "Trabajo_bajo_presión",
+      "Autodisciplina",
+      "Compromiso"
+    ]
+  },
+  "idiomas": [
+    {
+      "dialecto": "Inglés",
+      "nivel_idioma": "B1",
+      "certificado": true,
+      "bandera": "https://es.wikipedia.org/wiki/Bandera_del_Reino_Unido#/media/Archivo:Flag_of_the_United_Kingdom_(1-2).svg"
+    }
+  ],
+  "portfolio": [
+    {
+      "nombre": "Proyecto de Sistemas Inteligentes",
+      "descripcion": "Proyecto llevado a cabo en la asignatura Sistemas Inteligentes del grado superior de Informática",
+      "tdesarrollo": "20_horas;",
+      "tecnologias": [
+        {
+          "tipo": "Lenguaje_prog",
+          "valor": "Python"
+        },
+        {
+          "tipo": "IDE",
+          "valor": "VSCode"
+        }
+      ],
+      "rol": "Desarrollo",
+      "estado": "Finalizado",
+      "enlaces": [
+        "https://enlace-de-ejemplo.com"
+      ]
+    }
+  ]
+}

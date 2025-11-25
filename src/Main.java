@@ -1,6 +1,14 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
@@ -8,7 +16,6 @@ public class Main {
     public static void main(String[] args) {
         try {
             String archivoEntrada = "data/cv_entradas.txt";
-            String archivoSalida = "data/salida.txt";
 
             // 1. Leer archivo de entrada
             CharStream input = CharStreams.fromFileName(archivoEntrada);
@@ -33,23 +40,20 @@ public class Main {
             variablesGlobales.forEach((k, v) -> System.out.println(k + " = " + v));
 
             // 7. Mostrar cada CV procesado
+            RuntimeTypeAdapterFactory<Formacion> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory.of(Formacion.class, "tipo").registerSubtype(FormacionOficial.class, "oficial").registerSubtype(FormacionComplementaria.class, "complementaria");
+            Gson gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).setPrettyPrinting().create();
             System.out.println("\n==================== CVs PROCESADOS ====================");
             for (CV cv : cvs) {
                 System.out.println(cv);
+                String json = gson.toJson(cv);
+                String filename = "data/cvs/cv_" + cv.getIdentificador() + ".json";
+
+                Path ruta = Paths.get(filename);
+                Files.write(ruta, json.getBytes(StandardCharsets.UTF_8));
+
+                System.out.println("Archivo generado: " + ruta.toAbsolutePath());
             }
 
-            // 8. Guardar en archivo de salida
-            try (PrintWriter pw = new PrintWriter(new FileWriter(archivoSalida))) {
-                pw.println("==================== VARIABLES GLOBALES ====================");
-                variablesGlobales.forEach((k, v) -> pw.println(k + " = " + v));
-
-                pw.println("\n==================== CVs PROCESADOS ====================");
-                for (CV cv : cvs) {
-                    pw.println(cv);
-                }
-            }
-
-            System.out.println("\nProcesamiento completado. Salida guardada en: " + archivoSalida);
             System.out.println("Total de CVs procesados: " + cvs.size());
 
         } catch (Exception e) {

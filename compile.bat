@@ -14,14 +14,14 @@ if %errorlevel% neq 0 (
 )
 
 echo Compilando archivos generados...
-javac -cp lib/antlr-4.13.2-complete.jar -d bin generated\*.java
+javac -cp lib/antlr-4.13.2-complete.jar;lib/gson-2.13.1.jar -d bin generated\*.java
 if %errorlevel% neq 0 (
     echo Error al compilar archivos generados
     exit /b 1
 )
 
 echo Compilando clases del proyecto...
-javac -cp "lib/antlr-4.13.2-complete.jar;bin" -d bin src\*.java
+javac -cp lib/antlr-4.13.2-complete.jar;lib/gson-2.13.1.jar;bin -d bin src\*.java
 if %errorlevel% neq 0 (
     echo Error al compilar las clases del proyecto
     exit /b 1

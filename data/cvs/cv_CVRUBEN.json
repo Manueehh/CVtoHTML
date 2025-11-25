@@ -1,0 +1,146 @@
+{
+  "identificador": "CVRUBEN",
+  "informacionPersonal": {
+    "nombre": "Rubén Alaminos",
+    "puesto": "Estudiante",
+    "ubicacion": "Ciudad Real",
+    "email": "rurru01@gmail.com",
+    "telefono": "664607168",
+    "edad": 25,
+    "enlaces": [
+      "http://www.instagram.com/ruru",
+      "http://x.com/ruru"
+    ]
+  },
+  "formacion": {
+    "Oficial": [
+      {
+        "facultad": "Universidad de Castilla-La Mancha",
+        "anoFinal": 2021,
+        "titulo": "Técnico superior DAM",
+        "centro": "IES Leonardo Da Vinci",
+        "tipo": "oficial"
+      }
+    ],
+    "Complementaria": [
+      {
+        "descripcion": "Este curso de Python está dirigido a estudiantes y profesionales de ingeniería de sistemas, software, ciencias de la computación y áreas afines, interesados en desarrollar habilidades de programación con Python para aplicaciones web, automatización, análisis de datos, inteligencia artificial y más.",
+        "certificado": true,
+        "titulo": "Curso de Python",
+        "centro": "Edutin Academy",
+        "tipo": "complementaria"
+      }
+    ]
+  },
+  "experiencia": [
+    {
+      "empresa": "Expertic",
+      "puesto": "Becario de prácticas",
+      "ubicacion": "Albacete",
+      "periodo": {
+        "inicio": "10-09-2020",
+        "fin": "22-12-2020"
+      },
+      "jornada": "Prácticas",
+      "descripcion": "Desarrollo de aplicaciones multiplataforma y páginas web",
+      "tecnologias": [
+        {
+          "tipo": "Lenguaje_prog",
+          "valor": "Java"
+        },
+        {
+          "tipo": "IDE",
+          "valor": "Word Press"
+        },
+        {
+          "tipo": "Control_de_versiones",
+          "valor": "Git"
+        },
+        {
+          "tipo": "BBDD",
+          "valor": "MySql"
+        }
+      ]
+    },
+    {
+      "empresa": "Intelier",
+      "puesto": "Jefe de sala",
+      "ubicacion": "Alcázar de San Juan",
+      "periodo": {
+        "inicio": "01-06-2020",
+        "fin": "Actualidad"
+      },
+      "jornada": "Fijo discontinuo",
+      "descripcion": "Organización y responsable de un equipo encargado de la realización de eventos",
+      "tecnologias": []
+    }
+  ],
+  "hardSkills": [
+    {
+      "lenguaje": {
+        "tipo": "Lenguaje_prog",
+        "valor": "Python"
+      },
+      "icono": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
+      "nivelHabilidad": "Medio"
+    },
+    {
+      "lenguaje": {
+        "tipo": "Lenguaje_prog",
+        "valor": "Java"
+      },
+      "nivelHabilidad": "Avanzado"
+    }
+  ],
+  "softSkills": {
+    "habilidades": [
+      "Liderazgo",
+      "Trabajo_en_equipo",
+      "Resiliencia",
+      "Trabajo_bajo_presion",
+      "Toma_de_decisiones",
+      "Compromiso"
+    ]
+  },
+  "idiomas": [
+    {
+      "dialecto": "Ingles",
+      "nivel_idioma": "B1",
+      "certificado": true,
+      "bandera": "https://es.wikipedia.org/wiki/Bandera_del_Reino_Unido#/media/Archivo:Flag_of_the_United_Kingdom_(1-2).svg"
+    },
+    {
+      "dialecto": "Alemán",
+      "nivel_idioma": "B1",
+      "certificado": false
+    },
+    {
+      "dialecto": "Español",
+      "nivel_idioma": "C2",
+      "certificado": true
+    }
+  ],
+  "portfolio": [
+    {
+      "nombre": "Web Arcos",
+      "descripcion": "Proyecto llevado a cabo en la empresa Expertic sobre el desarrollo de la web de la empresa Arcos",
+      "tdesarrollo": "120_horas;",
+      "tecnologias": [
+        {
+          "tipo": "Lenguaje_prog",
+          "valor": "html"
+        },
+        {
+          "tipo": "IDE",
+          "valor": "WordPress"
+        }
+      ],
+      "rol": "Desarrollo",
+      "estado": "Finalizado",
+      "enlaces": [
+        "http://www.alarcos.com",
+        "http://urlprueba.com"
+      ]
+    }
+  ]
+}
