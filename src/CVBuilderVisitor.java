@@ -1,5 +1,6 @@
 import java.util.*;
-import org.antlr.v4.runtime.tree.TerminalNode;
+
+import model.*;
 
 public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
 
@@ -53,23 +54,31 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
 
         Persona persona = (Persona) visitInformacion_personal(ctx.informacion_personal());
 
+        @SuppressWarnings("unchecked")
         Map<String, List<? extends Formacion>> formacion = (Map<String, List<? extends Formacion>>) visitFormacion(
                 ctx.formacion());
 
         List<ExperienciaItem> experiencia = new ArrayList<>();
         if (ctx.experiencia() != null) {
-            experiencia = (List<ExperienciaItem>) visitExperiencia(ctx.experiencia());
+            @SuppressWarnings("unchecked")
+            List<ExperienciaItem> exp = (List<ExperienciaItem>) visitExperiencia(ctx.experiencia());
+            experiencia = exp;
         }
 
+        @SuppressWarnings("unchecked")
         Map<String, Object> habilidades = (Map<String, Object>) visitHabilidades(ctx.habilidades());
+        @SuppressWarnings("unchecked")
         List<HardSkill> hardSkills = (List<HardSkill>) habilidades.get("hardSkills");
         SoftSkill softSkills = (SoftSkill) habilidades.get("softSkills");
 
+        @SuppressWarnings("unchecked")
         List<Idioma> idiomas = (List<Idioma>) visitIdiomas(ctx.idiomas());
 
         List<Proyecto> portfolio = new ArrayList<>();
         if (ctx.portfolio() != null) {
-            portfolio = (List<Proyecto>) visitPortfolio(ctx.portfolio());
+            @SuppressWarnings("unchecked")
+            List<Proyecto> port = (List<Proyecto>) visitPortfolio(ctx.portfolio());
+            portfolio = port;
         }
 
         return new CV(identificador, persona, formacion, experiencia,
@@ -236,7 +245,9 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         }
 
         if (ctx.tecnologias() != null) {
-            item.setTecnologias((List<Tecnologia>) visitTecnologias(ctx.tecnologias()));
+            @SuppressWarnings("unchecked")
+            List<Tecnologia> tecs = (List<Tecnologia>) visitTecnologias(ctx.tecnologias());
+            item.setTecnologias(tecs);
         } else {
             item.setTecnologias(new ArrayList<>());
         }
@@ -274,7 +285,9 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
 
         List<String> softSkillsList = new ArrayList<>();
         for (CVParser.Soft_skillContext softCtx : campos.soft_skill()) {
-            softSkillsList.addAll((List<String>) visitSoft_skill(softCtx));
+            @SuppressWarnings("unchecked")
+            List<String> skills = (List<String>) visitSoft_skill(softCtx);
+            softSkillsList.addAll(skills);
         }
         SoftSkill softSkills = new SoftSkill(softSkillsList);
 
@@ -367,7 +380,9 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         proyecto.setRol(ctx.rol().ROL_TIPO().getText());
         proyecto.setEstado(ctx.estado().ESTADO_TIPO().getText());
 
-        proyecto.setTecnologias((List<Tecnologia>) visitTecnologias(ctx.tecnologias()));
+        @SuppressWarnings("unchecked")
+        List<Tecnologia> tecs = (List<Tecnologia>) visitTecnologias(ctx.tecnologias());
+        proyecto.setTecnologias(tecs);
 
         if (ctx.enlaces() != null) {
             List<String> enlaces = new ArrayList<>();

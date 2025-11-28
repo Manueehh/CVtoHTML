@@ -6,6 +6,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import model.*;
+import util.RuntimeTypeAdapterFactory;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -71,7 +74,10 @@ public final class CvProcessor {
 
         System.out.println("\n==================== CVs PROCESADOS ====================");
         for (CV cv : cvs) {
+            System.out.println("\n--- CV: " + cv.getIdentificador() + " ---");
             System.out.println(cv);
+            System.out.println();
+
             String json = gson.toJson(cv);
             String filename = "data/cvs/cv_" + cv.getIdentificador() + ".json";
 
@@ -79,6 +85,7 @@ public final class CvProcessor {
             Files.write(ruta, json.getBytes(StandardCharsets.UTF_8));
 
             System.out.println("Archivo generado: " + ruta.toAbsolutePath());
+            System.out.println();
         }
 
         System.out.println("Total de CVs procesados: " + cvs.size());

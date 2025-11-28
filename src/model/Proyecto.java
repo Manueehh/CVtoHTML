@@ -1,3 +1,5 @@
+package model;
+
 import java.util.List;
 
 public class Proyecto {
@@ -8,8 +10,9 @@ public class Proyecto {
     private String rol;
     private String estado;
     private List<String> enlaces;
-    
-    public Proyecto(){}
+
+    public Proyecto() {
+    }
 
     public String getNombre() {
         return nombre;
@@ -73,5 +76,4 @@ public class Proyecto {
                 + ", tecnologias=" + tecnologias + ", rol=" + rol + ", estado=" + estado + ", enlaces=" + enlaces + "]";
     }
 
-    
 }

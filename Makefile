@@ -32,8 +32,8 @@ ANTLR_STAMP := $(GEN_ANTLR)/.generated
 JFLEX_STAMP := $(GEN_JFLEX)/.generated
 CUP_STAMP   := $(GEN_CUP)/.generated
 
-# Fuentes Java del proyecto
-SRC_JAVA := $(wildcard $(SRC_DIR)/*.java)
+# Fuentes Java del proyecto (incluyendo subdirectorios)
+SRC_JAVA := $(shell find $(SRC_DIR) -name '*.java')
 
 .PHONY: all clean run run-cup dirs
 

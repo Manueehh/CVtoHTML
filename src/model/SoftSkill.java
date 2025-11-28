@@ -1,3 +1,5 @@
+package model;
+
 import java.util.List;
 
 public class SoftSkill {
@@ -7,7 +9,8 @@ public class SoftSkill {
         this.habilidades = habilidades;
     }
 
-    public SoftSkill(){}
+    public SoftSkill() {
+    }
 
     public List<String> getHabilidades() {
         return habilidades;
@@ -22,5 +25,4 @@ public class SoftSkill {
         return "SoftSkill [habilidades=" + habilidades + "]";
     }
 
-    
 }

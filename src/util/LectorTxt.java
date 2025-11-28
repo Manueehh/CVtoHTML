@@ -1,10 +1,10 @@
+package util;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import model.*;
 
 public class LectorTxt {
 
@@ -41,7 +43,8 @@ public class LectorTxt {
     public static String extraerIdentificadorCV(String contenido) {
         String regex = "cv\\s+CV\\s*\\{\\s*(\\w+)";
         Matcher m = Pattern.compile(regex, Pattern.DOTALL).matcher(contenido);
-        if (m.find()) return m.group(1);
+        if (m.find())
+            return m.group(1);
         return null;
     }
 
@@ -51,7 +54,8 @@ public class LectorTxt {
         String regexGlobal = "\\(global\\s+Global\\s*\\{([^}]*)\\}\\)";
         Matcher mGlobal = Pattern.compile(regexGlobal, Pattern.DOTALL).matcher(contenido);
 
-        if (!mGlobal.find()) return vars;
+        if (!mGlobal.find())
+            return vars;
 
         String cuerpoGlobal = mGlobal.group(1);
 
@@ -67,28 +71,27 @@ public class LectorTxt {
         return vars;
     }
 
-    public static Persona parsearInformacionPersonal(String seccion, Map<String,String> variablesGlobales){
+    public static Persona parsearInformacionPersonal(String seccion, Map<String, String> variablesGlobales) {
         String regexCampo = "\\(([\\p{L}\\p{N}_]+)\\s+[\\p{L}\\p{N}_]+\\s*:\\s*([^;]+)\\s*;\\)";
         Matcher m = Pattern.compile(regexCampo).matcher(seccion);
 
-        Map<String,Object> campos = new HashMap<>();
+        Map<String, Object> campos = new HashMap<>();
 
-        while (m.find()){
+        while (m.find()) {
             String campo = m.group(1).toLowerCase();
             String valor = m.group(2).trim();
 
             boolean esCadenaConComillas = valor.startsWith("\"") && valor.endsWith("\"");
 
-            if (!esCadenaConComillas && valor.contains(",")){
+            if (!esCadenaConComillas && valor.contains(",")) {
                 List<String> lista = Arrays.stream(valor.split(",")).map(String::trim).collect(Collectors.toList());
                 campos.put(campo, lista);
-            }
-            else{
-                if (valor.startsWith("\"") && valor.endsWith("\"")){
+            } else {
+                if (valor.startsWith("\"") && valor.endsWith("\"")) {
                     valor = valor.substring(1, valor.length() - 1).trim();
                 }
 
-                if (variablesGlobales.containsKey(valor)){
+                if (variablesGlobales.containsKey(valor)) {
                     valor = variablesGlobales.get(valor);
                 }
                 campos.put(campo, valor);
@@ -102,7 +105,7 @@ public class LectorTxt {
         String telefono = (String) campos.get("telefono");
 
         Integer edad = null;
-        if (campos.containsKey("edad")){
+        if (campos.containsKey("edad")) {
             edad = Integer.parseInt(((String) campos.get("edad")).trim());
         }
         String fechaNacimiento = (String) campos.getOrDefault("fecha", null);
@@ -116,17 +119,18 @@ public class LectorTxt {
 
             if (v instanceof List<?>) {
                 enlaces = ((List<?>) v).stream().map(Object::toString).collect(Collectors.toList());
-            }
-            else if (v instanceof String){
-                enlaces = Arrays.asList(((String)v).trim());
+            } else if (v instanceof String) {
+                enlaces = Arrays.asList(((String) v).trim());
             }
         }
 
-        Persona persona = new Persona(nombre,puesto,ubicacion,email,telefono,fechaNacimiento,edad,imagenPerfil,imagenFondo,enlaces);
+        Persona persona = new Persona(nombre, puesto, ubicacion, email, telefono, fechaNacimiento, edad, imagenPerfil,
+                imagenFondo, enlaces);
         return persona;
     }
 
-    public static Map<String,List<? extends Formacion>> parsearFormacion(String seccion, Map<String,String> variablesGlobales){
+    public static Map<String, List<? extends Formacion>> parsearFormacion(String seccion,
+            Map<String, String> variablesGlobales) {
         List<FormacionOficial> oficiales = new ArrayList<>();
         List<FormacionComplementaria> complementarias = new ArrayList<>();
 
@@ -135,30 +139,28 @@ public class LectorTxt {
 
         for (String bloque : bloquesOficial) {
             String contenido = bloque.replaceFirst("^\\(oficial\\s+\\w+\\s*\\(", "").replaceAll("\\)\\)$", "");
-            Map<String,Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
-            campos.forEach((k,v)-> System.out.println("KEY="+k+" VALUE="+v));
+            Map<String, Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
+            campos.forEach((k, v) -> System.out.println("KEY=" + k + " VALUE=" + v));
             FormacionOficial fOf = new FormacionOficial(
                     (String) campos.get("titulo"),
                     (String) campos.get("centro"),
-                    (String) campos.getOrDefault("facultad",null),
+                    (String) campos.getOrDefault("facultad", null),
                     Integer.parseInt(((String) campos.get("añofinal")).trim()),
-                    (String) campos.getOrDefault("planestudio", null)
-            );
+                    (String) campos.getOrDefault("planestudio", null));
             oficiales.add(fOf);
         }
 
         for (String bloque : bloquesComplementaria) {
             String contenido = bloque.replaceFirst("^\\(complementaria\\s+\\w+\\s*\\(", "").replaceAll("\\)\\)$", "");
-            Map<String,Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
+            Map<String, Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
 
             FormacionComplementaria fCom = new FormacionComplementaria(
                     (String) campos.get("titulo"),
                     (String) campos.get("centro"),
                     campos.get("horas") != null ? Integer.parseInt(((String) campos.get("horas")).trim()) : null,
-                    (String) campos.getOrDefault("descripcion",null),
+                    (String) campos.getOrDefault("descripcion", null),
                     campos.get("añofinal") != null ? Integer.parseInt(((String) campos.get("añofinal")).trim()) : null,
-                    "si".equalsIgnoreCase((String) campos.get("certificado"))
-            );
+                    "si".equalsIgnoreCase((String) campos.get("certificado")));
             complementarias.add(fCom);
         }
 
@@ -169,13 +171,13 @@ public class LectorTxt {
         return resultado;
     }
 
-    public static Map<String,Object> parsearCamposGenerico(String contenido, Map<String,String> variablesGlobales){
-        Map<String,Object> campos = new HashMap<>();
+    public static Map<String, Object> parsearCamposGenerico(String contenido, Map<String, String> variablesGlobales) {
+        Map<String, Object> campos = new HashMap<>();
 
         String regexCampo = "\\(([\\p{L}\\p{N}_]+)\\s+[\\p{L}\\p{N}_]+\\s*:\\s*([^;]+)\\s*;\\s*\\)";
         Matcher m = Pattern.compile(regexCampo).matcher(contenido);
 
-        while(m.find()) {
+        while (m.find()) {
             String campo = m.group(1);
             String valor = m.group(2).trim();
 
@@ -185,13 +187,14 @@ public class LectorTxt {
             if (esListaEstructural) {
                 List<String> elementos = new ArrayList<>();
                 Matcher sub = Pattern.compile("\\([^\\)]*\\)").matcher(valor);
-                while (sub.find()) elementos.add(sub.group());
+                while (sub.find())
+                    elementos.add(sub.group());
                 campos.put(campo, elementos);
                 continue;
             }
 
             if (esCadenaConComillas) {
-                valor = valor.substring(1, valor.length()-1).trim();
+                valor = valor.substring(1, valor.length() - 1).trim();
             }
 
             if (variablesGlobales.containsKey(valor)) {
@@ -234,30 +237,29 @@ public class LectorTxt {
         return bloques;
     }
 
-    private static List<String> extraerExperienciaItems(String seccion){
+    private static List<String> extraerExperienciaItems(String seccion) {
 
         List<String> bloques = new ArrayList<>();
         String regex = "\\(experiencia_item\\s+[\\p{L}\\p{N}_]+\\s*\\(";
         Matcher m = Pattern.compile(regex).matcher(seccion);
 
-        while (m.find()){
+        while (m.find()) {
             int start = m.start();
             int open = 0;
             boolean started = false;
 
-            for (int i = start; i < seccion.length(); i++){
+            for (int i = start; i < seccion.length(); i++) {
                 char c = seccion.charAt(i);
 
-                if (c == '('){
+                if (c == '(') {
                     open++;
                     started = true;
-                }
-                else if (c == ')'){
+                } else if (c == ')') {
                     open--;
                 }
 
-                if (started && open == 0){
-                    bloques.add(seccion.substring(start, i+1));
+                if (started && open == 0) {
+                    bloques.add(seccion.substring(start, i + 1));
                     break;
                 }
             }
@@ -265,36 +267,37 @@ public class LectorTxt {
         return bloques;
     }
 
-    private static List<ExperienciaItem> parsearExperienciaItems(String seccion, Map<String,String> variablesGlobales){
+    private static List<ExperienciaItem> parsearExperienciaItems(String seccion,
+            Map<String, String> variablesGlobales) {
         List<ExperienciaItem> trabajos = new ArrayList<>();
 
         List<String> items = extraerExperienciaItems(seccion);
 
-        for (String item : items){
+        for (String item : items) {
             String contenido = item.replaceFirst("^\\(experiencia_item\\s+\\w+\\s*\\(", "").replaceAll("\\)\\)$", "");
 
-            Map<String,Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
+            Map<String, Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
 
             ExperienciaItem trabajo = new ExperienciaItem();
 
             trabajo.setEmpresa((String) campos.get("empresa"));
             trabajo.setPuesto((String) campos.get("puesto"));
             trabajo.setUbicacion((String) campos.get("ubicacion"));
-            trabajo.setJornada((String) campos.getOrDefault("jornada",null));
-            trabajo.setDescripcion((String) campos.getOrDefault("descripcion",null));
-            trabajo.setResponsabilidades((String) campos.getOrDefault("responsabilidades",null));
-            trabajo.setLogros((String) campos.getOrDefault("logros",null));
+            trabajo.setJornada((String) campos.getOrDefault("jornada", null));
+            trabajo.setDescripcion((String) campos.getOrDefault("descripcion", null));
+            trabajo.setResponsabilidades((String) campos.getOrDefault("responsabilidades", null));
+            trabajo.setLogros((String) campos.getOrDefault("logros", null));
 
             List<Tecnologia> tecnologias = extraerTecnologias(contenido);
             trabajo.setTecnologias(tecnologias);
 
-            if (campos.containsKey("periodo")){
+            if (campos.containsKey("periodo")) {
                 String rawPeriodo = (String) campos.get("periodo");
 
                 Matcher mmm = Pattern.compile("(\\d{2}-\\d{2}-\\d{4}|Actualidad)").matcher(rawPeriodo);
 
                 List<String> fechas = new ArrayList<>();
-                while (mmm.find()){
+                while (mmm.find()) {
                     fechas.add(mmm.group());
                 }
 
@@ -318,9 +321,10 @@ public class LectorTxt {
         Pattern inicioPat = Pattern.compile("\\(tecnologias\\s+[\\p{L}\\p{N}_]+\\s*:");
         Matcher mi = inicioPat.matcher(contenido);
 
-        if (!mi.find()) return lista;
+        if (!mi.find())
+            return lista;
 
-        int start = mi.start(); 
+        int start = mi.start();
 
         int open = 0;
         int end = -1;
@@ -328,8 +332,10 @@ public class LectorTxt {
         for (int i = start; i < contenido.length(); i++) {
             char c = contenido.charAt(i);
 
-            if (c == '(') open++;
-            else if (c == ')') open--;
+            if (c == '(')
+                open++;
+            else if (c == ')')
+                open--;
 
             if (open == 0) {
                 end = i;
@@ -337,11 +343,14 @@ public class LectorTxt {
             }
         }
 
-        if (end == -1) return lista;
+        if (end == -1)
+            return lista;
 
         String bloque = contenido.substring(start, end + 1);
 
-        Matcher mTec = Pattern.compile("\\(tecnologia\\s+([\\p{L}\\p{N}_]+)\\s*:\\s*\"?([^\";]+)\"?\\s*;\\)",Pattern.DOTALL).matcher(bloque);
+        Matcher mTec = Pattern
+                .compile("\\(tecnologia\\s+([\\p{L}\\p{N}_]+)\\s*:\\s*\"?([^\";]+)\"?\\s*;\\)", Pattern.DOTALL)
+                .matcher(bloque);
 
         while (mTec.find()) {
             String tipo = mTec.group(1).trim();
@@ -358,7 +367,8 @@ public class LectorTxt {
         String regexInicio = "\\(habilidades_campos\\s+Hard_skills\\s*\\(";
         Matcher m = Pattern.compile(regexInicio).matcher(seccion);
 
-        if (!m.find()) return null;
+        if (!m.find())
+            return null;
 
         int start = m.start();
         int open = 0;
@@ -374,8 +384,7 @@ public class LectorTxt {
             if (c == '(') {
                 open++;
                 started = true;
-            }
-            else if (c == ')') {
+            } else if (c == ')') {
                 open--;
             }
 
@@ -387,7 +396,7 @@ public class LectorTxt {
         return null;
     }
 
-    private static List<HardSkill> parsearHardSkills(String hard, Map<String,String> variablesGlobales){
+    private static List<HardSkill> parsearHardSkills(String hard, Map<String, String> variablesGlobales) {
         List<String> bloques = new ArrayList<>();
 
         List<HardSkill> hardSkills = new ArrayList<>();
@@ -396,41 +405,40 @@ public class LectorTxt {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(hard);
 
-        while (m.find()){
+        while (m.find()) {
             int start = m.start();
             int open = 0;
             boolean started = false;
 
-            for (int i = start; i < hard.length(); i++){
+            for (int i = start; i < hard.length(); i++) {
                 char c = hard.charAt(i);
 
-                if (c == '('){
-                    open ++;
+                if (c == '(') {
+                    open++;
                     started = true;
-                }
-                else if (c == ')'){
+                } else if (c == ')') {
                     open--;
                 }
 
-                if (started && open == 0){
-                    String bloqueCompleto = hard.substring(start, i+1);
+                if (started && open == 0) {
+                    String bloqueCompleto = hard.substring(start, i + 1);
                     bloques.add(bloqueCompleto);
                     break;
                 }
             }
         }
 
-        for (String bloque : bloques){
+        for (String bloque : bloques) {
 
             String contenido = bloque.replaceFirst("^\\(hard_skill\\s*\\(", "").replaceAll("\\)\\$", "");
             String regexTec = "\\(tecnologia\\s+([\\p{L}\\p{N}_]+)\\s*:\\s*\"?([^\";]+)\"?\\s*;\\)";
             Pattern pTec = Pattern.compile(regexTec);
             Matcher mTec = pTec.matcher(contenido);
 
-            Map<String,Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
+            Map<String, Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
 
-            while (mTec.find()){
-                Tecnologia tec = new Tecnologia(mTec.group(1),mTec.group(2));
+            while (mTec.find()) {
+                Tecnologia tec = new Tecnologia(mTec.group(1), mTec.group(2));
                 String icono = (String) campos.get("icono");
                 String descripcion = (String) campos.get("descripcion");
                 String nivel_habilidad = (String) campos.get("nivel_habilidad");
@@ -440,16 +448,16 @@ public class LectorTxt {
                 hardSkills.add(skill);
             }
 
-
         }
         return hardSkills;
     }
 
-    public static String extraerBloqueSoftSkills(String seccion){
+    public static String extraerBloqueSoftSkills(String seccion) {
         String regexInicio = "Soft_skills\\s*\\(";
         Matcher m = Pattern.compile(regexInicio).matcher(seccion);
 
-        if (!m.find()) return null;
+        if (!m.find())
+            return null;
 
         int start = m.start();
         int open = 0;
@@ -465,8 +473,7 @@ public class LectorTxt {
             if (c == '(') {
                 open++;
                 started = true;
-            }
-            else if (c == ')') {
+            } else if (c == ')') {
                 open--;
             }
 
@@ -478,7 +485,7 @@ public class LectorTxt {
         return null;
     }
 
-    public static SoftSkill parsearSoftSkills(String soft, Map<String,String> variablesGlobales){
+    public static SoftSkill parsearSoftSkills(String soft, Map<String, String> variablesGlobales) {
         List<String> bloques = new ArrayList<>();
         List<String> listaSkills = new ArrayList<>();
 
@@ -488,36 +495,36 @@ public class LectorTxt {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(soft);
 
-        while (m.find()){
+        while (m.find()) {
             int start = m.start();
             int open = 0;
             boolean started = false;
 
-            for (int i = start; i < soft.length(); i++){
+            for (int i = start; i < soft.length(); i++) {
                 char c = soft.charAt(i);
 
-                if (c == '('){
-                    open ++;
+                if (c == '(') {
+                    open++;
                     started = true;
-                }
-                else if (c == ')'){
+                } else if (c == ')') {
                     open--;
                 }
 
-                if (started && open == 0){
-                    String bloqueCompleto = soft.substring(start, i+1);
+                if (started && open == 0) {
+                    String bloqueCompleto = soft.substring(start, i + 1);
                     bloques.add(bloqueCompleto);
                     break;
                 }
             }
         }
-        String contenido = bloques.get(0).replaceFirst("^\\(soft_skill\\s+Habilidad\\s*:\\s*", "").replaceAll("\\)\\s*\\)$", ")").replace("habilidad_lista ", "habilidad_lista ");
-        
-        String listaStringSkills = contenido.replace("(habilidad_lista ","").replace(") ;)","").trim();
+        String contenido = bloques.get(0).replaceFirst("^\\(soft_skill\\s+Habilidad\\s*:\\s*", "")
+                .replaceAll("\\)\\s*\\)$", ")").replace("habilidad_lista ", "habilidad_lista ");
+
+        String listaStringSkills = contenido.replace("(habilidad_lista ", "").replace(") ;)", "").trim();
 
         Matcher mHab = Pattern.compile("\\(habilidad\\s+([^)]+)\\)").matcher(listaStringSkills);
 
-        while(mHab.find()){
+        while (mHab.find()) {
             listaSkills.add(mHab.group(1).trim());
         }
         softSkills.setHabilidades(listaSkills);
@@ -526,30 +533,29 @@ public class LectorTxt {
 
     }
 
-    public static String extraerBloquesIdiomas(String seccion){
+    public static String extraerBloquesIdiomas(String seccion) {
         List<String> bloques = new ArrayList<>();
 
         String regex = "\\(idioma(?=\\s*\\()";
         Matcher m = Pattern.compile(regex).matcher(seccion);
 
-        while (m.find()){
+        while (m.find()) {
             int start = m.start();
             int open = 0;
             boolean started = false;
 
-            for (int i = start; i < seccion.length(); i++){
+            for (int i = start; i < seccion.length(); i++) {
                 char c = seccion.charAt(i);
 
                 if (c == '(') {
                     open++;
                     started = true;
-                }
-                else if (c == ')') {
+                } else if (c == ')') {
                     open--;
                 }
 
-                if (started && open == 0){
-                    bloques.add(seccion.substring(start, i+1));
+                if (started && open == 0) {
+                    bloques.add(seccion.substring(start, i + 1));
                     break;
                 }
             }
@@ -557,40 +563,39 @@ public class LectorTxt {
         return bloques.get(0);
     }
 
-    public static List<Idioma> parsearIdiomas(String bloque, Map<String,String> variablesGlobales){
+    public static List<Idioma> parsearIdiomas(String bloque, Map<String, String> variablesGlobales) {
         List<String> bloques = new ArrayList<>();
         List<Idioma> idiomas = new ArrayList<>();
         String regexIdioma = "\\(idioma_campos\\s*\\(";
         Matcher mIdi = Pattern.compile(regexIdioma).matcher(bloque);
 
-        while(mIdi.find()){
+        while (mIdi.find()) {
             int start = mIdi.start();
             int open = 0;
             boolean started = false;
 
-            for (int i = start; i < bloque.length(); i++){
+            for (int i = start; i < bloque.length(); i++) {
                 char c = bloque.charAt(i);
 
                 if (c == '(') {
                     open++;
                     started = true;
-                }
-                else if (c == ')') {
+                } else if (c == ')') {
                     open--;
                 }
 
-                if (started && open == 0){
-                    bloques.add(bloque.substring(start, i+1));
+                if (started && open == 0) {
+                    bloques.add(bloque.substring(start, i + 1));
                     break;
                 }
             }
         }
 
-        for (String bloqueIdi : bloques){
+        for (String bloqueIdi : bloques) {
 
             String contenido = bloqueIdi.replaceFirst("^\\(idioma_campos\\s*", "").replaceAll("\\)$", "");
 
-            Map<String,Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
+            Map<String, Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
 
             Idioma idioma = new Idioma();
 
@@ -605,7 +610,7 @@ public class LectorTxt {
         return idiomas;
     }
 
-    public static List<String> extraerProyectos(String seccion){
+    public static List<String> extraerProyectos(String seccion) {
         List<String> bloques = new ArrayList<>();
 
         String regex = "\\(proyecto\\s+Proyecto\\s*\\(";
@@ -616,18 +621,17 @@ public class LectorTxt {
             int open = 0;
             boolean started = false;
 
-            for (int i = start; i < seccion.length(); i++){
+            for (int i = start; i < seccion.length(); i++) {
                 char c = seccion.charAt(i);
 
                 if (c == '(') {
                     open++;
                     started = true;
-                }
-                else if (c == ')') {
+                } else if (c == ')') {
                     open--;
                 }
 
-                if (started && open == 0){
+                if (started && open == 0) {
                     bloques.add(seccion.substring(start, i + 1));
                     break;
                 }
@@ -636,13 +640,14 @@ public class LectorTxt {
         return bloques;
     }
 
-    public static List<Proyecto> parsearProyectos(List<String> bloques, Map<String,String> variablesGlobales){
+    public static List<Proyecto> parsearProyectos(List<String> bloques, Map<String, String> variablesGlobales) {
         List<Proyecto> proyectos = new ArrayList<>();
 
-        for (String bloque : bloques){
-            String contenido = bloque.replaceFirst("^\\(proyecto\\s+Proyecto\\s*\\(", "").replaceAll("\\)\\)$", "").replaceAll("<missing [^>]+>", "");
+        for (String bloque : bloques) {
+            String contenido = bloque.replaceFirst("^\\(proyecto\\s+Proyecto\\s*\\(", "").replaceAll("\\)\\)$", "")
+                    .replaceAll("<missing [^>]+>", "");
 
-            Map<String,Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
+            Map<String, Object> campos = parsearCamposGenerico(contenido, variablesGlobales);
 
             Proyecto p = new Proyecto();
 
@@ -661,9 +666,8 @@ public class LectorTxt {
 
                 if (v instanceof List<?>) {
                     enlaces = ((List<?>) v).stream().map(Object::toString).collect(Collectors.toList());
-                }
-                else if (v instanceof String){
-                    enlaces = Arrays.asList(((String)v).trim());
+                } else if (v instanceof String) {
+                    enlaces = Arrays.asList(((String) v).trim());
                 }
             }
 
@@ -710,27 +714,27 @@ public class LectorTxt {
         }
 
         return lista;
-    }   
+    }
 
     public static Map<String, Integer> detectarIndicesSecciones(String cvOriginal) {
         String cv = cvOriginal.replaceAll("\\p{M}", "").toLowerCase();
 
-        Map<String,Integer> indices = new LinkedHashMap<>();
+        Map<String, Integer> indices = new LinkedHashMap<>();
 
         String[] nombres = {
-            "informacion_personal",
-            "formacion",
-            "experiencia",
-            "habilidades",
-            "idiomas",
-            "portfolio"
+                "informacion_personal",
+                "formacion",
+                "experiencia",
+                "habilidades",
+                "idiomas",
+                "portfolio"
         };
 
-        for (String nombre : nombres){
+        for (String nombre : nombres) {
             String patron = nombre + " seccion";
             int indice = cv.indexOf(patron);
 
-            if (indice != -1){
+            if (indice != -1) {
                 indices.put(nombre, indice);
             }
         }
@@ -738,11 +742,12 @@ public class LectorTxt {
         return indices;
     }
 
-    public static Map<String, String> extraerBloques(String cv, Map<String,Integer> indices) {
+    public static Map<String, String> extraerBloques(String cv, Map<String, Integer> indices) {
 
-        List<Map.Entry<String,Integer>> lista = indices.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList());
+        List<Map.Entry<String, Integer>> lista = indices.entrySet().stream().sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toList());
 
-        Map<String,String> bloques = new LinkedHashMap<>();
+        Map<String, String> bloques = new LinkedHashMap<>();
 
         for (int i = 0; i < lista.size(); i++) {
 
@@ -764,27 +769,32 @@ public class LectorTxt {
         contenido = lector.leerArchivo();
 
         List<String> cvs = extraerCVs(contenido);
-        Map<String,String> variablesGlobales = extraerVariablesGlobales(contenido);
+        Map<String, String> variablesGlobales = extraerVariablesGlobales(contenido);
 
         for (String cvBruto : cvs) {
 
             // DETECTAR SECCIONES POR ÍNDICES
-            Map<String,Integer> indices = detectarIndicesSecciones(cvBruto);
+            Map<String, Integer> indices = detectarIndicesSecciones(cvBruto);
 
             // EXTRAER EL TEXTO DE CADA BLOQUE
-            Map<String,String> bloques = extraerBloques(cvBruto, indices);
+            Map<String, String> bloques = extraerBloques(cvBruto, indices);
 
             // IDENTIFICADOR DEL CV
             String identificador = extraerIdentificadorCV(cvBruto);
 
             // INFORMACIÓN PERSONAL
-            Persona persona = parsearInformacionPersonal(bloques.getOrDefault("informacion_personal", ""),variablesGlobales);
+            Persona persona = parsearInformacionPersonal(bloques.getOrDefault("informacion_personal", ""),
+                    variablesGlobales);
 
             // FORMACIÓN
-            Map<String,List<? extends Formacion>> formaciones = bloques.containsKey("formacion") ? parsearFormacion(bloques.get("formacion"), variablesGlobales) : new HashMap<>();
+            Map<String, List<? extends Formacion>> formaciones = bloques.containsKey("formacion")
+                    ? parsearFormacion(bloques.get("formacion"), variablesGlobales)
+                    : new HashMap<>();
 
             // EXPERIENCIA (opcional)
-            List<ExperienciaItem> trabajos = bloques.containsKey("experiencia") ? parsearExperienciaItems(bloques.get("experiencia"), variablesGlobales) : new ArrayList<>();
+            List<ExperienciaItem> trabajos = bloques.containsKey("experiencia")
+                    ? parsearExperienciaItems(bloques.get("experiencia"), variablesGlobales)
+                    : new ArrayList<>();
 
             // HABILIDADES (Hard y Soft)
             List<HardSkill> hSkills = new ArrayList<>();
@@ -798,14 +808,18 @@ public class LectorTxt {
                 sSkills = parsearSoftSkills(soft, variablesGlobales);
             }
 
-            // IDIOMAS 
-            List<Idioma> idiomas = bloques.containsKey("idiomas") ? parsearIdiomas(extraerBloquesIdiomas(bloques.get("idiomas")), variablesGlobales) : new ArrayList<>();
+            // IDIOMAS
+            List<Idioma> idiomas = bloques.containsKey("idiomas")
+                    ? parsearIdiomas(extraerBloquesIdiomas(bloques.get("idiomas")), variablesGlobales)
+                    : new ArrayList<>();
 
             // PORTFOLIO (opcional)
-            List<Proyecto> proyectos = bloques.containsKey("portfolio") ? parsearProyectos(extraerProyectos(bloques.get("portfolio")), variablesGlobales) : new ArrayList<>();
+            List<Proyecto> proyectos = bloques.containsKey("portfolio")
+                    ? parsearProyectos(extraerProyectos(bloques.get("portfolio")), variablesGlobales)
+                    : new ArrayList<>();
 
             // GENERAR OBJETO FINAL
-            CV cv = new CV(identificador,persona,formaciones,trabajos,hSkills,sSkills,idiomas,proyectos);
+            CV cv = new CV(identificador, persona, formaciones, trabajos, hSkills, sSkills, idiomas, proyectos);
 
             System.out.println(cv);
         }
