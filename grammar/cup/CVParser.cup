@@ -1,0 +1,386 @@
+import java_cup.runtime.*;
+import java.util.*;
+
+parser code {:
+    public void report_error(String message, Object info) {
+        StringBuilder m = new StringBuilder("Error");
+        if (info instanceof java_cup.runtime.Symbol) {
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+            if (s.left >= 0) {
+                m.append(" en linea " + (s.left + 1));
+                if (s.right >= 0)
+                    m.append(", columna " + (s.right + 1));
+            }
+        }
+        m.append(": " + message);
+        System.err.println(m);
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        throw new RuntimeException("Error fatal de parsing");
+    }
+:};
+
+terminal LLAVE_ABRE, LLAVE_CIERRA;
+terminal PAREN_ABRE, PAREN_CIERRA;
+terminal DOS_PUNTOS, PUNTO_Y_COMA, COMA;
+terminal FLECHA, IGUAL;
+
+terminal GLOBAL_KW, CV_KW, PERSONA_KW;
+
+terminal SECCION_INFO_PERSONA;
+terminal SECCION_FORMACION;
+terminal SECCION_EXPERIENCIA;
+terminal SECCION_HABILIDADES;
+terminal SECCION_IDIOMAS;
+terminal SECCION_PORTFOLIO;
+
+terminal NOMBRE_KW, PUESTO_KW, UBICACION_KW;
+terminal EMAIL_KW, TELEFONO_KW, FECHA_NACIMIENTO_KW, EDAD_KW;
+terminal IMAGEN_DE_PERFIL_KW, IMAGEN_DE_FONDO_KW, ENLACES_KW;
+
+terminal OFICIAL_KW, COMPLEMENTARIA_KW;
+terminal CENTRO_KW, FACULTAD_KW, PLAN_DE_ESTUDIOS_KW;
+terminal TITULO_KW, HORAS_KW, CERTIFICADO_KW, AÑO_KW;
+
+terminal TRABAJO_KW, EMPRESA_KW;
+terminal PERIODO_KW, JORNADA_KW, DESCRIPCION_KW;
+terminal RESPONSABILIDADES_KW, LOGROS_KW, TECNOLOGIAS_KW;
+terminal ACTUALIDAD_KW;
+
+terminal HARD_SKILLS_KW, SOFT_SKILLS_KW;
+terminal ICONO_KW, NIVEL_KW, HABILIDAD_KW;
+
+terminal DIALECTO_KW, BANDERA_KW;
+
+terminal PROYECTO_KW;
+terminal TIEMPO_DE_DESARROLLO_KW, ROL_KW, ESTADO_KW;
+
+terminal String HABILIDAD_TIPO;
+terminal String NIVEL_HABILIDAD_TIPO;
+terminal String NIVEL_IDIOMA_TIPO;
+terminal String DIALECTO_TIPO;
+terminal String ESTADO_TIPO;
+terminal String ROL_TIPO;
+terminal String TEC_TIPO;
+terminal String CERTIFICADO_VALOR;
+
+terminal String TELEFONO_VALOR;
+terminal String EDAD_VALOR;
+terminal String AÑO;
+terminal String CORREO;
+terminal String URL;
+terminal String FECHA;
+terminal String TDESARROLLO_VALOR;
+terminal String IDENTIFICADOR;
+terminal String DIGITOS;
+terminal String CADENA;
+
+non terminal cv_grupo;
+non terminal global;
+non terminal variable_list;
+non terminal variable;
+non terminal cv_list;
+non terminal cv;
+
+non terminal informacion_personal;
+non terminal persona_decl;
+non terminal campos_persona;
+non terminal nombre;
+non terminal puesto;
+non terminal ubicacion;
+non terminal email;
+non terminal telefono;
+non terminal fecha_o_edad_opt;
+non terminal fecha_nacimiento;
+non terminal edad;
+non terminal enlaces_opt;
+non terminal enlaces;
+non terminal url_list;
+non terminal imagen_perfil_opt;
+non terminal imagen_perfil;
+non terminal imagen_fondo_opt;
+non terminal imagen_fondo;
+
+non terminal formacion;
+non terminal oficial_list;
+non terminal oficial;
+non terminal centro;
+non terminal añofinal;
+non terminal titulo;
+non terminal planestudio_opt;
+non terminal planestudio;
+non terminal facultad_opt;
+non terminal facultad;
+non terminal complementaria_opt;
+non terminal complementaria;
+non terminal horas_opt;
+non terminal horas;
+non terminal descripcion_opt;
+non terminal descripcion;
+non terminal añofinal_opt;
+non terminal certificado_opt;
+non terminal certificado;
+
+non terminal experiencia;
+non terminal experiencias;
+non terminal experiencia_item;
+non terminal empresa;
+non terminal periodo;
+non terminal rango_fechas;
+non terminal fecha_fin;
+non terminal jornada_opt;
+non terminal jornada;
+non terminal responsabilidades_opt;
+non terminal responsabilidades;
+non terminal logros_opt;
+non terminal logros;
+non terminal tecnologias_opt;
+non terminal tecnologias;
+non terminal tecnologia_list;
+non terminal tecnologia;
+
+non terminal habilidades;
+non terminal habilidades_campos;
+non terminal hard_skill_list;
+non terminal hard_skill;
+non terminal soft_skill_list;
+non terminal soft_skill;
+non terminal habilidad_lista;
+non terminal lenguaje;
+non terminal icono_opt;
+non terminal icono;
+non terminal nivel_habilidad;
+
+non terminal idiomas;
+non terminal idioma;
+non terminal idioma_campos_list;
+non terminal idioma_campos;
+non terminal dialecto;
+non terminal nivel_idioma;
+non terminal bandera_opt;
+non terminal bandera;
+
+non terminal portfolio;
+non terminal bportfolio;
+non terminal proyecto_list;
+non terminal proyecto;
+non terminal tdesarrollo;
+non terminal rol;
+non terminal estado;
+
+non terminal cv_cuerpo;
+non terminal String cadena_o_url;
+
+start with cv_grupo;
+
+cv_grupo ::= global cv_list;
+
+global ::= GLOBAL_KW LLAVE_ABRE variable_list LLAVE_CIERRA;
+
+variable_list ::= variable_list variable
+                | variable;
+
+variable ::= IDENTIFICADOR IGUAL CADENA PUNTO_Y_COMA;
+
+cv_list ::= cv_list cv
+          | cv;
+
+cv ::= CV_KW LLAVE_ABRE IDENTIFICADOR informacion_personal formacion cv_cuerpo LLAVE_CIERRA;
+
+cv_cuerpo ::= experiencia habilidades idiomas portfolio
+            | experiencia habilidades idiomas
+            | habilidades idiomas portfolio
+            | habilidades idiomas;
+
+informacion_personal ::= SECCION_INFO_PERSONA LLAVE_ABRE persona_decl enlaces_opt imagen_perfil_opt imagen_fondo_opt LLAVE_CIERRA;
+
+persona_decl ::= PERSONA_KW PAREN_ABRE campos_persona PAREN_CIERRA;
+
+campos_persona ::= nombre puesto ubicacion email telefono fecha_o_edad_opt;
+
+nombre ::= NOMBRE_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+puesto ::= PUESTO_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+ubicacion ::= UBICACION_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+email ::= EMAIL_KW DOS_PUNTOS CORREO PUNTO_Y_COMA;
+
+telefono ::= TELEFONO_KW DOS_PUNTOS TELEFONO_VALOR PUNTO_Y_COMA;
+
+fecha_o_edad_opt ::= fecha_nacimiento
+                   | edad
+                   |;
+
+fecha_nacimiento ::= FECHA_NACIMIENTO_KW DOS_PUNTOS FECHA PUNTO_Y_COMA;
+
+edad ::= EDAD_KW DOS_PUNTOS EDAD_VALOR PUNTO_Y_COMA;
+
+imagen_perfil_opt ::= imagen_perfil
+                    |;
+
+imagen_perfil ::= IMAGEN_DE_PERFIL_KW DOS_PUNTOS URL PUNTO_Y_COMA;
+
+imagen_fondo_opt ::= imagen_fondo
+                   |;
+
+imagen_fondo ::= IMAGEN_DE_FONDO_KW DOS_PUNTOS URL PUNTO_Y_COMA;
+
+enlaces_opt ::= enlaces
+              |;
+
+enlaces ::= ENLACES_KW DOS_PUNTOS url_list PUNTO_Y_COMA;
+
+url_list ::= url_list COMA URL
+           | URL;
+
+formacion ::= SECCION_FORMACION LLAVE_ABRE oficial_list complementaria_opt LLAVE_CIERRA;
+
+oficial_list ::= oficial_list oficial
+               | oficial;
+
+oficial ::= OFICIAL_KW PAREN_ABRE titulo centro facultad_opt añofinal planestudio_opt PAREN_CIERRA;
+
+centro ::= CENTRO_KW DOS_PUNTOS cadena_o_url PUNTO_Y_COMA;
+
+añofinal ::= AÑO_KW DOS_PUNTOS AÑO PUNTO_Y_COMA;
+
+titulo ::= TITULO_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+planestudio_opt ::= planestudio
+                  |;
+
+planestudio ::= PLAN_DE_ESTUDIOS_KW DOS_PUNTOS cadena_o_url PUNTO_Y_COMA;
+
+facultad_opt ::= facultad
+               |;
+
+facultad ::= FACULTAD_KW DOS_PUNTOS cadena_o_url PUNTO_Y_COMA;
+
+complementaria_opt ::= complementaria
+                     |;
+
+complementaria ::= COMPLEMENTARIA_KW PAREN_ABRE titulo centro horas_opt descripcion_opt añofinal_opt certificado_opt PAREN_CIERRA;
+
+horas_opt ::= horas
+            |;
+
+horas ::= HORAS_KW DOS_PUNTOS DIGITOS PUNTO_Y_COMA;
+
+descripcion_opt ::= descripcion
+                  |;
+
+descripcion ::= DESCRIPCION_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+añofinal_opt ::= añofinal
+               |;
+
+certificado_opt ::= certificado
+                  |;
+
+certificado ::= CERTIFICADO_KW DOS_PUNTOS CERTIFICADO_VALOR PUNTO_Y_COMA;
+
+experiencia ::= SECCION_EXPERIENCIA LLAVE_ABRE experiencias LLAVE_CIERRA;
+
+experiencias ::= experiencias experiencia_item
+               | experiencia_item;
+
+experiencia_item ::= TRABAJO_KW PAREN_ABRE empresa puesto ubicacion periodo jornada_opt descripcion_opt responsabilidades_opt logros_opt tecnologias_opt PAREN_CIERRA;
+
+empresa ::= EMPRESA_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+periodo ::= PERIODO_KW DOS_PUNTOS rango_fechas PUNTO_Y_COMA;
+
+rango_fechas ::= FECHA FLECHA fecha_fin;
+
+fecha_fin ::= FECHA
+            | ACTUALIDAD_KW;
+
+jornada_opt ::= jornada
+              |;
+
+jornada ::= JORNADA_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+responsabilidades_opt ::= responsabilidades
+                        |;
+
+responsabilidades ::= RESPONSABILIDADES_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+logros_opt ::= logros
+             |;
+
+logros ::= LOGROS_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+tecnologias_opt ::= tecnologias
+                  |;
+
+tecnologias ::= TECNOLOGIAS_KW DOS_PUNTOS tecnologia_list;
+
+tecnologia_list ::= tecnologia_list tecnologia
+                  | tecnologia;
+
+tecnologia ::= TEC_TIPO DOS_PUNTOS CADENA PUNTO_Y_COMA;
+
+habilidades ::= SECCION_HABILIDADES LLAVE_ABRE habilidades_campos LLAVE_CIERRA;
+
+habilidades_campos ::= HARD_SKILLS_KW PAREN_ABRE hard_skill_list PAREN_CIERRA SOFT_SKILLS_KW PAREN_ABRE soft_skill_list PAREN_CIERRA;
+
+hard_skill_list ::= hard_skill_list hard_skill
+                  | hard_skill;
+
+hard_skill ::= lenguaje icono_opt descripcion_opt nivel_habilidad;
+
+soft_skill_list ::= soft_skill_list soft_skill
+                  | soft_skill;
+
+soft_skill ::= HABILIDAD_KW DOS_PUNTOS habilidad_lista PUNTO_Y_COMA;
+
+habilidad_lista ::= habilidad_lista COMA HABILIDAD_TIPO
+                  | HABILIDAD_TIPO;
+
+lenguaje ::= tecnologia;
+
+icono_opt ::= icono
+            |;
+
+icono ::= ICONO_KW DOS_PUNTOS URL PUNTO_Y_COMA;
+
+nivel_habilidad ::= NIVEL_KW DOS_PUNTOS NIVEL_HABILIDAD_TIPO PUNTO_Y_COMA;
+
+idiomas ::= SECCION_IDIOMAS LLAVE_ABRE idioma LLAVE_CIERRA;
+
+idioma ::= idioma_campos_list;
+
+idioma_campos_list ::= idioma_campos_list idioma_campos
+                     | idioma_campos;
+
+idioma_campos ::= dialecto nivel_idioma certificado_opt bandera_opt;
+
+dialecto ::= DIALECTO_KW DOS_PUNTOS DIALECTO_TIPO PUNTO_Y_COMA;
+
+nivel_idioma ::= NIVEL_KW DOS_PUNTOS NIVEL_IDIOMA_TIPO PUNTO_Y_COMA;
+
+bandera_opt ::= bandera
+              |;
+
+bandera ::= BANDERA_KW DOS_PUNTOS URL PUNTO_Y_COMA;
+
+portfolio ::= SECCION_PORTFOLIO LLAVE_ABRE bportfolio LLAVE_CIERRA;
+
+bportfolio ::= proyecto_list;
+
+proyecto_list ::= proyecto_list proyecto
+                | proyecto;
+
+proyecto ::= PROYECTO_KW PAREN_ABRE nombre descripcion tdesarrollo tecnologias rol estado enlaces_opt PAREN_CIERRA;
+
+tdesarrollo ::= TIEMPO_DE_DESARROLLO_KW DOS_PUNTOS TDESARROLLO_VALOR PUNTO_Y_COMA;
+
+rol ::= ROL_KW DOS_PUNTOS ROL_TIPO PUNTO_Y_COMA;
+
+estado ::= ESTADO_KW DOS_PUNTOS ESTADO_TIPO PUNTO_Y_COMA;
+
+cadena_o_url ::= CADENA
+               | URL;
