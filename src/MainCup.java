@@ -32,10 +32,12 @@ public class MainCup {
 
             if (result != null && result.value != null) {
                 System.out.println("✓ Parsing completado exitosamente!");
-                System.out.println("Resultado: " + result.value);
             } else {
                 System.out.println("✓ Parsing completado (sin errores sintácticos)");
             }
+
+            CvProcessor.Result procesado = CvProcessor.parseWithAntlr(archivoEntrada);
+            CvProcessor.render(procesado);
 
             reader.close();
 
