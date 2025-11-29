@@ -1,13 +1,11 @@
-Global {
-	ESI = "Escuela Superior de Informática";
-	UCLM = "Universidad de Castilla-La Mancha";
-	CIU = "Ciudad Real";
+GLOBAL {
+    UCLM = "Universidad de Castilla-La Mancha";
+    ESI = "Escuela Superior de Informática";
+    CIU = "Ciudad Real";
+    ESTUDIANTE = "Estudiante de Ingeniería";
+    GRADO_INF = "Grado en Ingeniería Informática";
+    MINSAIT = "Minsait INDRA";
 }
-
-
-// ==========================
-// CV RUBÉN
-// ==========================
 
 CV { 
     CVRUBEN
@@ -102,18 +100,19 @@ CV {
     seccion(Información_personal) {
         Persona(
             Nombre: "Manuel Avilés";
-            Puesto: "Estudiante";
-            Ubicación: "Ciudad Real";
+            Puesto: ESTUDIANTE;
+            Ubicación: CIU;
             Email: manuelaviles1512@gmail.com;
             Teléfono: 619276132;
-            Edad: 24;
+            Fecha_nacimiento: 15-12-2000;
         )
+        Imagen_de_perfil: http://i.imgur.com/s07rAwk.jpeg;
     }
     Seccion(Formación) {
         Oficial(
-            Título: "Bachillerato";
-            Centro: "IES Miguel de Cervantes";
-            Facultad: "Escuela Superior de Informática";
+            Título: GRADO_INF;
+            Centro: UCLM;
+            Facultad: ESI;
             Año: 2025;
             Plan_de_estudios: https://esi.uclm.es/index.php/grado-en-ingenieria-informatica/plan-de-estudios;
         )
@@ -126,7 +125,7 @@ CV {
     }
     Seccion(Experiencia) {
         Trabajo(
-            Empresa: "Minsait INDRA";
+            Empresa: MINSAIT;
             Puesto: "Becario de prácticas";
             Ubicación: "Ciudad Real";
             Periodo: 01-10-2024 -> 22-12-2024;
@@ -172,56 +171,51 @@ CV {
 
 CV {
     CVMIguel
-
     Seccion(Información_personal) {
-    Persona(
-        Nombre: "Miguel Marín Huertas";
-        Puesto: "Estudiante";
-        Ubicación: "Ciudad Real, España";
-        Email: miguelmh004@gmail.com;
-        Teléfono: 665432886;
-        Edad: 21;
-    )
+        Persona(
+            Nombre: "Miguel Marín Huertas";
+            Puesto: "Estudiante";
+            Ubicación: "Ciudad Real, España";
+            Email: miguelmh004@gmail.com;
+            Teléfono: 665432886;
+            Edad: 21;
+        )
     }
-
-Seccion(Formación) {
-  Oficial(
-    Título: "Grado en Ingeniería Informática";
-    Centro: "Universidad de Castilla-La Mancha";
-    Año: 2026;
-  )
-  Complementaria(
-    Título: "Deep Learning with Python";
-    Centro: "O'Reilly";
-    Año: 2024;
-    Certificado: NO;
-  )
-}
-
-Seccion(Experiencia) {
-  Trabajo(
-    Empresa: "VISILAB (UCLM)";
-    Puesto: "Investigación en imágenes adversarias";
-    Ubicación: "Ciudad Real, España";
-    Periodo: 01-02-2025->31-07-2025;
-    Jornada: "Prácticas";
-    Descripción: "Generación y evaluación de imágenes adversarias (FGSM, PGD, CW-L2, Boundary, HSJ, Zoo) sobre arquitecturas CNN y Transformers.";
-    Tecnologias: Lenguaje_prog: "Python"; Frameworks: "PyTorch"; Control_de_versiones: "Git"; IDE: "VS Code"; SSOO: "Linux";
-  )
-}
-
-Seccion(Habilidades) {
-  Hard_skills(
-    Lenguaje_prog: "Python"; Nivel: Avanzado;
-    Lenguaje_prog: "Java"; Nivel: Medio;
-  )
-  Soft_skills(
-    Habilidad: Trabajo_en_equipo, Pensamiento_crítico;
-  )
-}
-
-Seccion(Idiomas) {
-  Dialecto: Español; Nivel: C2; Certificado: NO;
-  Dialecto: Inglés; Nivel: C1; Certificado: NO;
-}
+    Seccion(Formación) {
+        Oficial(
+            Título: "Grado en Ingeniería Informática";
+            Centro: "Universidad de Castilla-La Mancha";
+            Año: 2026;
+        )
+        Complementaria(
+            Título: "Deep Learning with Python";
+            Centro: "O'Reilly";
+            Año: 2024;
+            Certificado: NO;
+        )
+    }
+    Seccion(Experiencia) {
+        Trabajo(
+            Empresa: "VISILAB (UCLM)";
+            Puesto: "Investigación en imágenes adversarias";
+            Ubicación: "Ciudad Real, España";
+            Periodo: 01-02-2025->31-07-2025;
+            Jornada: "Prácticas";
+            Descripción: "Generación y evaluación de imágenes adversarias (FGSM, PGD, CW-L2, Boundary, HSJ, Zoo) sobre arquitecturas CNN y Transformers.";
+            Tecnologias: Lenguaje_prog: "Python"; Frameworks: "PyTorch"; Control_de_versiones: "Git"; IDE: "VS Code"; SSOO: "Linux";
+        )
+    }
+    Seccion(Habilidades) {
+        Hard_skills(
+            Lenguaje_prog: "Python"; Nivel: Avanzado;
+            Lenguaje_prog: "Java"; Nivel: Medio;
+        )
+        Soft_skills(
+            Habilidad: Trabajo_en_equipo, Pensamiento_crítico;
+        )
+    }
+    Seccion(Idiomas) {
+        Dialecto: Español; Nivel: C2; Certificado: NO;
+        Dialecto: Inglés; Nivel: C1; Certificado: NO;
+    }
 }

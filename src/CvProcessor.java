@@ -3,14 +3,9 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import model.*;
-import util.RuntimeTypeAdapterFactory;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,36 +50,62 @@ public final class CvProcessor {
         return new Result(cvs, variables);
     }
 
-    public static void render(Result result) throws IOException {
+    /**
+     * Genera archivos HTML para cada CV parseado
+     * 
+     * @param result    Resultado del parsing con CVs y variables globales
+     * @param outputDir Directorio donde se guardarán los archivos HTML
+     * @throws IOException Si hay error al escribir archivos
+     */
+    public static void renderToHTML(Result result, String outputDir) throws IOException {
+        List<CV> cvs = result.getCvs();
+
+        // Crear directorio de salida si no existe
+        Path outputPath = Paths.get(outputDir);
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        System.out.println("\\n==================== GENERANDO PORTFOLIOS HTML ====================");
+
+        PortfolioHTMLGenerator generator = new PortfolioHTMLGenerator();
+
+        for (CV cv : cvs) {
+            String identificador = cv.getIdentificador();
+            String filename = outputDir + "/portfolio_" + identificador + ".html";
+
+            System.out.println("\\nGenerando portfolio para: " + identificador);
+
+            try {
+                generator.saveToFile(cv, filename);
+                System.out.println("✓ Portfolio HTML generado: " + Paths.get(filename).toAbsolutePath());
+            } catch (Exception e) {
+                System.err.println("✗ Error generando portfolio para " + identificador + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("\\n==================== RESUMEN ====================");
+        System.out.println("Total de portfolios generados: " + cvs.size());
+        System.out.println("Directorio de salida: " + outputPath.toAbsolutePath());
+    }
+
+    /**
+     * Imprime información de los CVs parseados (solo para debugging)
+     * 
+     * @param result Resultado del parsing
+     */
+    public static void render(Result result) {
         Map<String, String> variablesGlobales = result.getVariablesGlobales();
         List<CV> cvs = result.getCvs();
 
-        System.out.println("\n==================== VARIABLES GLOBALES ====================");
+        System.out.println("\\n==================== VARIABLES GLOBALES ====================");
         variablesGlobales.forEach((k, v) -> System.out.println(k + " = " + v));
 
-        RuntimeTypeAdapterFactory<Formacion> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory
-                .of(Formacion.class, "tipo")
-                .registerSubtype(FormacionOficial.class, "oficial")
-                .registerSubtype(FormacionComplementaria.class, "complementaria");
-
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
-                .setPrettyPrinting()
-                .create();
-
-        System.out.println("\n==================== CVs PROCESADOS ====================");
+        System.out.println("\\n==================== CVs PROCESADOS ====================");
         for (CV cv : cvs) {
-            System.out.println("\n--- CV: " + cv.getIdentificador() + " ---");
+            System.out.println("\\n--- CV: " + cv.getIdentificador() + " ---");
             System.out.println(cv);
-            System.out.println();
-
-            String json = gson.toJson(cv);
-            String filename = "data/cvs/cv_" + cv.getIdentificador() + ".json";
-
-            Path ruta = Paths.get(filename);
-            Files.write(ruta, json.getBytes(StandardCharsets.UTF_8));
-
-            System.out.println("Archivo generado: " + ruta.toAbsolutePath());
             System.out.println();
         }
 

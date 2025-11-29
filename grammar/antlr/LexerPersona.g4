@@ -126,7 +126,7 @@ IDENTIFICADOR : [A-Z] [a-zA-ZñÑ_]*;
 DIGITOS : DIG_NO_CERO DIGITO*;
 
 // CADENAS
-fragment CARACTER : ~["\r\n];
+fragment CARACTER : ~["\r\n;];
 fragment TEXTO : CARACTER+;
 CADENA_CAMBIO : '"' -> pushMode(CADENA_MODO), more;
 

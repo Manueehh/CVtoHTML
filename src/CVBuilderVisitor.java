@@ -92,8 +92,20 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         CVParser.Campos_personaContext campos = personaCtx.campos_persona();
 
         String nombre = limpiarCadena(campos.nombre().CADENA().getText());
-        String puesto = limpiarCadena(campos.puesto().CADENA().getText());
-        String ubicacion = limpiarCadena(campos.ubicacion().CADENA().getText());
+
+        String puesto = null;
+        if (campos.puesto().CADENA() != null) {
+            puesto = limpiarCadena(campos.puesto().CADENA().getText());
+        } else if (campos.puesto().IDENTIFICADOR() != null) {
+            puesto = resolveVariable(campos.puesto().IDENTIFICADOR().getText());
+        }
+
+        String ubicacion = null;
+        if (campos.ubicacion().CADENA() != null) {
+            ubicacion = limpiarCadena(campos.ubicacion().CADENA().getText());
+        } else if (campos.ubicacion().IDENTIFICADOR() != null) {
+            ubicacion = resolveVariable(campos.ubicacion().IDENTIFICADOR().getText());
+        }
         String email = campos.email().CORREO().getText();
         String telefono = campos.telefono().TELEFONO_VALOR().getText();
 
@@ -150,7 +162,13 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
 
     @Override
     public FormacionOficial visitOficial(CVParser.OficialContext ctx) {
-        String titulo = limpiarCadena(ctx.titulo().CADENA().getText());
+        String titulo = null;
+        if (ctx.titulo().CADENA() != null) {
+            titulo = limpiarCadena(ctx.titulo().CADENA().getText());
+        } else if (ctx.titulo().IDENTIFICADOR() != null) {
+            titulo = resolveVariable(ctx.titulo().IDENTIFICADOR().getText());
+        }
+
         String centro = obtenerValorCentro(ctx.centro());
 
         String facultad = null;
@@ -159,6 +177,8 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
                 facultad = limpiarCadena(ctx.facultad().CADENA().getText());
             } else if (ctx.facultad().URL() != null) {
                 facultad = ctx.facultad().URL().getText();
+            } else if (ctx.facultad().IDENTIFICADOR() != null) {
+                facultad = resolveVariable(ctx.facultad().IDENTIFICADOR().getText());
             }
         }
 
@@ -178,7 +198,13 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
 
     @Override
     public FormacionComplementaria visitComplementaria(CVParser.ComplementariaContext ctx) {
-        String titulo = limpiarCadena(ctx.titulo().CADENA().getText());
+        String titulo = null;
+        if (ctx.titulo().CADENA() != null) {
+            titulo = limpiarCadena(ctx.titulo().CADENA().getText());
+        } else if (ctx.titulo().IDENTIFICADOR() != null) {
+            titulo = resolveVariable(ctx.titulo().IDENTIFICADOR().getText());
+        }
+
         String centro = obtenerValorCentro(ctx.centro());
 
         Integer horas = null;
@@ -221,8 +247,18 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
     public ExperienciaItem visitExperiencia_item(CVParser.Experiencia_itemContext ctx) {
         ExperienciaItem item = new ExperienciaItem();
 
-        item.setEmpresa(limpiarCadena(ctx.empresa().CADENA().getText()));
-        item.setPuesto(limpiarCadena(ctx.puesto().CADENA().getText()));
+        if (ctx.empresa().CADENA() != null) {
+            item.setEmpresa(limpiarCadena(ctx.empresa().CADENA().getText()));
+        } else if (ctx.empresa().IDENTIFICADOR() != null) {
+            item.setEmpresa(resolveVariable(ctx.empresa().IDENTIFICADOR().getText()));
+        }
+
+        if (ctx.puesto().CADENA() != null) {
+            item.setPuesto(limpiarCadena(ctx.puesto().CADENA().getText()));
+        } else if (ctx.puesto().IDENTIFICADOR() != null) {
+            item.setPuesto(resolveVariable(ctx.puesto().IDENTIFICADOR().getText()));
+        }
+
         item.setUbicacion(limpiarCadena(ctx.ubicacion().CADENA().getText()));
 
         Periodo periodo = (Periodo) visitPeriodo(ctx.periodo());
@@ -321,7 +357,7 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         List<String> habilidades = new ArrayList<>();
 
         for (var hab : ctx.habilidad_lista().habilidad()) {
-            habilidades.add(hab.HABILIDAD_TIPO().getText());
+            habilidades.add(hab.HABILIDAD_TIPO().getText().replace("_", " "));
         }
 
         return habilidades;
@@ -376,7 +412,7 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
 
         proyecto.setNombre(limpiarCadena(ctx.nombre().CADENA().getText()));
         proyecto.setDescripcion(limpiarCadena(ctx.descripcion().CADENA().getText()));
-        proyecto.setTdesarrollo(ctx.tdesarrollo().TDESARROLLO_VALOR().getText());
+        proyecto.setTdesarrollo(ctx.tdesarrollo().TDESARROLLO_VALOR().getText().replace("_", " "));
         proyecto.setRol(ctx.rol().ROL_TIPO().getText());
         proyecto.setEstado(ctx.estado().ESTADO_TIPO().getText());
 
@@ -428,11 +464,20 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         return cadena;
     }
 
+    private String resolveVariable(String key) {
+        if (variablesGlobales.containsKey(key)) {
+            return variablesGlobales.get(key);
+        }
+        return key; // Si no existe, devolver la clave tal cual (o lanzar error)
+    }
+
     private String obtenerValorCentro(CVParser.CentroContext ctx) {
         if (ctx.CADENA() != null) {
             return limpiarCadena(ctx.CADENA().getText());
         } else if (ctx.URL() != null) {
             return ctx.URL().getText();
+        } else if (ctx.IDENTIFICADOR() != null) {
+            return resolveVariable(ctx.IDENTIFICADOR().getText());
         }
         return null;
     }
