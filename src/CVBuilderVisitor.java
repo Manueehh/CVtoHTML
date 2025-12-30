@@ -1,3 +1,4 @@
+import java.time.Year;
 import java.util.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -136,6 +137,9 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
             ubicacion = resolveVariable(campos.ubicacion().IDENTIFICADOR().getText());
         }
         String email = campos.email().CORREO().getText();
+        if (email != null && !email.contains("@")) {
+            warn(ctx, "Email no valido: " + email);
+        }
         String telefono = campos.telefono().TELEFONO_VALOR().getText();
 
         String fechaNacimiento = null;
@@ -227,6 +231,11 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
 
         Integer anoFinal = Integer.parseInt(ctx.añofinal().AÑO().getText());
 
+        int year = Year.now().getValue();
+        if (anoFinal > year) {
+            warn(ctx, "Año final en formacion oficial posterior al año actual: " + anoFinal);
+        }
+
         String planEstudios = null;
         if (ctx.planestudio() != null) {
             if (ctx.planestudio().CADENA() != null) {
@@ -254,6 +263,12 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         if (ctx.horas() != null) {
             horas = Integer.parseInt(ctx.horas().DIGITOS().getText());
         }
+        if (horas != null && horas < 0) {
+            warn(ctx, "Horas negativas: " + horas);
+        }
+        if (horas != null && horas == 0) {
+            warn(ctx, "Horas iguales a 0: " + horas);
+        }
 
         String descripcion = null;
         if (ctx.descripcion() != null) {
@@ -263,6 +278,10 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         Integer anoFinal = null;
         if (ctx.añofinal() != null) {
             anoFinal = Integer.parseInt(ctx.añofinal().AÑO().getText());
+        }
+        int year = Year.now().getValue();
+        if (anoFinal != null && anoFinal > year) {
+            warn(ctx, "Año final en formacion complementaria posterior al año actual: " + anoFinal);
         }
 
         boolean certificado = false;
@@ -345,6 +364,14 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
             periodo.setFin("Actualidad");
         } else {
             periodo.setFin(rango.FECHA(1).getText());
+        }
+
+        if (rango.ACTUALIDAD_KW() == null) {
+            String inicio = periodo.getInicio().split("-")[2];
+            String fin = periodo.getFin().split("-")[2];
+            if (Integer.parseInt(inicio) > Integer.parseInt(fin)) {
+                warn(ctx, "Fecha de inicio posterior a fecha de fin");
+            }
         }
 
         return periodo;

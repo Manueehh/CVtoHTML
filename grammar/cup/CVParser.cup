@@ -172,6 +172,8 @@ non terminal estado;
 
 non terminal cv_cuerpo;
 non terminal String cadena_o_url;
+non terminal String cadena_o_url_o_identificador;
+non terminal String cadena_o_identificador;
 
 start with cv_grupo;
 
@@ -202,9 +204,9 @@ campos_persona ::= nombre puesto ubicacion email telefono fecha_o_edad_opt;
 
 nombre ::= NOMBRE_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
 
-puesto ::= PUESTO_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+puesto ::= PUESTO_KW DOS_PUNTOS cadena_o_identificador PUNTO_Y_COMA;
 
-ubicacion ::= UBICACION_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+ubicacion ::= UBICACION_KW DOS_PUNTOS cadena_o_identificador PUNTO_Y_COMA;
 
 email ::= EMAIL_KW DOS_PUNTOS CORREO PUNTO_Y_COMA;
 
@@ -243,11 +245,11 @@ oficial_list ::= oficial_list oficial
 
 oficial ::= OFICIAL_KW PAREN_ABRE titulo centro facultad_opt añofinal planestudio_opt PAREN_CIERRA;
 
-centro ::= CENTRO_KW DOS_PUNTOS cadena_o_url PUNTO_Y_COMA;
+centro ::= CENTRO_KW DOS_PUNTOS cadena_o_url_o_identificador PUNTO_Y_COMA;
 
 añofinal ::= AÑO_KW DOS_PUNTOS AÑO PUNTO_Y_COMA;
 
-titulo ::= TITULO_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+titulo ::= TITULO_KW DOS_PUNTOS cadena_o_identificador PUNTO_Y_COMA;
 
 planestudio_opt ::= planestudio
                   |;
@@ -257,7 +259,7 @@ planestudio ::= PLAN_DE_ESTUDIOS_KW DOS_PUNTOS cadena_o_url PUNTO_Y_COMA;
 facultad_opt ::= facultad
                |;
 
-facultad ::= FACULTAD_KW DOS_PUNTOS cadena_o_url PUNTO_Y_COMA;
+facultad ::= FACULTAD_KW DOS_PUNTOS cadena_o_url_o_identificador PUNTO_Y_COMA;
 
 complementaria_opt ::= complementaria
                      |;
@@ -289,7 +291,7 @@ experiencias ::= experiencias experiencia_item
 
 experiencia_item ::= TRABAJO_KW PAREN_ABRE empresa puesto ubicacion periodo jornada_opt descripcion_opt responsabilidades_opt logros_opt tecnologias_opt PAREN_CIERRA;
 
-empresa ::= EMPRESA_KW DOS_PUNTOS CADENA PUNTO_Y_COMA;
+empresa ::= EMPRESA_KW DOS_PUNTOS cadena_o_identificador PUNTO_Y_COMA;
 
 periodo ::= PERIODO_KW DOS_PUNTOS rango_fechas PUNTO_Y_COMA;
 
@@ -384,3 +386,10 @@ estado ::= ESTADO_KW DOS_PUNTOS ESTADO_TIPO PUNTO_Y_COMA;
 
 cadena_o_url ::= CADENA
                | URL;
+
+cadena_o_identificador ::= CADENA
+                         | IDENTIFICADOR;
+
+cadena_o_url_o_identificador ::= CADENA
+                               | URL
+                               | IDENTIFICADOR;
