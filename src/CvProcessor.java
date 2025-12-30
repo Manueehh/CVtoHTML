@@ -46,17 +46,10 @@ public final class CvProcessor {
         CVBuilderVisitor visitor = new CVBuilderVisitor();
         List<CV> cvs = visitor.visitCv_grupo((CVParser.Cv_grupoContext) tree);
         Map<String, String> variables = visitor.getVariablesGlobales();
-
+        visitor.getWarnings().forEach(System.out::println);
         return new Result(cvs, variables);
     }
 
-    /**
-     * Genera archivos HTML para cada CV parseado
-     * 
-     * @param result    Resultado del parsing con CVs y variables globales
-     * @param outputDir Directorio donde se guardarán los archivos HTML
-     * @throws IOException Si hay error al escribir archivos
-     */
     public static void renderToHTML(Result result, String outputDir) throws IOException {
         List<CV> cvs = result.getCvs();
 
@@ -90,11 +83,6 @@ public final class CvProcessor {
         System.out.println("Directorio de salida: " + outputPath.toAbsolutePath());
     }
 
-    /**
-     * Imprime información de los CVs parseados (solo para debugging)
-     * 
-     * @param result Resultado del parsing
-     */
     public static void render(Result result) {
         Map<String, String> variablesGlobales = result.getVariablesGlobales();
         List<CV> cvs = result.getCvs();

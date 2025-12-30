@@ -13,7 +13,6 @@ public class PortfolioHTMLGenerator {
         public void saveToFile(CV cv, String filePath) throws IOException {
                 String htmlContent = generateHTML(cv);
 
-                // Crear directorio si no existe
                 Path path = Paths.get(filePath);
                 Path parentDir = path.getParent();
                 if (parentDir != null) {

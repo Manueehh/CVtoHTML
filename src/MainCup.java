@@ -2,24 +2,16 @@ import java_cup.runtime.*;
 
 import java.io.*;
 
-/**
- * Main para ejecutar el parser JFlex + CUP
- * Equivalente funcional al Main de ANTLR
- */
 public class MainCup {
 
     public static void main(String[] args) {
         try {
             String archivoEntrada = "data/cv_entradas.txt";
 
-            // 1. Crear el lexer JFlex compatible con CUP
             FileReader reader = new FileReader(archivoEntrada);
             LexerCup lexer = new LexerCup(reader);
 
-            // 2. Crear el parser CUP
             CupParser parser = new CupParser(lexer);
-
-            // 3. Parsear el archivo
             System.out.println("=== Iniciando parsing con JFlex + CUP ===");
             Symbol result = parser.parse();
 

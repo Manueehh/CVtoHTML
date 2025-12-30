@@ -1,8 +1,33 @@
 import java.util.*;
+import org.antlr.v4.runtime.ParserRuleContext;
 
 import model.*;
 
 public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
+
+    private final Set<String> identificadores = new HashSet<>();
+    private final List<String> warnings = new ArrayList<>();
+    private final List<String> errors = new ArrayList<>();
+
+    public List<String> getWarnings() {
+        return warnings;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    private void warn(ParserRuleContext ctx, String msg) {
+        int l = ctx.start.getLine();
+        int c = ctx.start.getCharPositionInLine();
+        warnings.add("Warning at line " + l + ", column " + c + ": " + msg);
+    }
+
+    private void error(ParserRuleContext ctx, String msg) {
+        int l = ctx.start.getLine();
+        int c = ctx.start.getCharPositionInLine();
+        errors.add("Error at line " + l + ", column " + c + ": " + msg);
+    }
 
     // Variables globales del bloque Global
     private Map<String, String> variablesGlobales = new HashMap<>();
@@ -51,6 +76,10 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
     @Override
     public CV visitCv(CVParser.CvContext ctx) {
         String identificador = ctx.IDENTIFICADOR().getText();
+
+        if (!identificadores.add(identificador)) {
+            warn(ctx, "Duplicate CV identifier: " + identificador);
+        }
 
         Persona persona = (Persona) visitInformacion_personal(ctx.informacion_personal());
 
@@ -118,6 +147,16 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         if (campos.edad() != null) {
             edad = Integer.parseInt(campos.edad().EDAD_VALOR().getText());
         }
+        if (fechaNacimiento != null) {
+            Integer fecha_numero = Integer.parseInt(fechaNacimiento.split("-")[2]);
+            if (fecha_numero < 1920 || fecha_numero > 2025) {
+                warn(ctx, "Fecha de nacimiento no valida: " + fechaNacimiento);
+            }
+        }
+
+        if (edad != null && (edad > 100 || edad < 0)) {
+            warn(ctx, "Edad no valida: " + edad);
+        }
 
         String imagenPerfil = null;
         if (ctx.imagen_perfil() != null) {
@@ -134,6 +173,10 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
             for (var url : ctx.enlaces().URL()) {
                 enlaces.add(url.getText());
             }
+        }
+
+        if (enlaces.size() > 10) {
+            warn(ctx, "Mas de 10 enlaces: " + enlaces);
         }
 
         return new Persona(nombre, puesto, ubicacion, email, telefono,
