@@ -95,7 +95,7 @@ CV {
 // CV MANUEL
 // ==========================
 CV { 
-    CVRUBEN
+    CVMANUEL
     /* Comentario multilínea CV 1 */
     seccion(Información_personal) {
         Persona(
@@ -106,6 +106,7 @@ CV {
             Teléfono: 619276132;
             Fecha_nacimiento: 15-12-2000;
         )
+        Enlaces: http://instagram.com/manueehhh , http://github.com/manueehh;
         Imagen_de_perfil: http://i.imgur.com/s07rAwk.jpeg;
     }
     Seccion(Formación) {

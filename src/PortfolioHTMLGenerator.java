@@ -56,6 +56,9 @@ public class PortfolioHTMLGenerator {
                 // About Section
                 html.append(generateAboutSection(persona));
 
+                // Enlaces
+                html.append(generateLinksSection(persona.getEnlaces()));
+
                 // Habilidades (Skills)
                 html.append(generateSkillsSection(hardSkills, softSkills));
 
@@ -137,83 +140,74 @@ public class PortfolioHTMLGenerator {
 
         private String generateSidebar() {
                 return "<!-- Sidebar Start -->\n" +
-                                "<div class=\"ms-sidebar-overlay\"></div>\n" +
-                                "<div class=\"ms-sidebar\">\n" +
-                                "    <div class=\"menu-list\">\n" +
-                                "        <a href=\"javascript:void(0)\" class=\"close-sidebar\">×</a>\n" +
-                                "        <ul class=\"navbar-nav mb-2 ml-auto\" id=\"top-menu\">\n" +
-                                "            <li class=\"nav-item active\"><a class=\"nav-link ms-nav\" href=\"#home\">Home</a></li>\n"
-                                +
-                                "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#about\">About</a></li>\n"
-                                +
-                                "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#skills\">Habilidades</a></li>\n"
-                                +
-                                "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#languages\">Idiomas</a></li>\n"
-                                +
-                                "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#education\">Formación</a></li>\n"
-                                +
-                                "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#experience\">Experiencia</a></li>\n"
-                                +
-                                "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#portfolio\">Portfolio</a></li>\n"
-                                +
-                                "        </ul>\n" +
-                                "    </div>\n" +
-                                "</div>\n" +
-                                "<!-- Sidebar End -->\n";
+                        "<div class=\"ms-sidebar-overlay\"></div>\n" +
+                        "<div class=\"ms-sidebar\">\n" +
+                        "    <div class=\"menu-list\">\n" +
+                        "        <a href=\"javascript:void(0)\" class=\"close-sidebar\">×</a>\n" +
+                        "        <ul class=\"navbar-nav mb-2 ml-auto\" id=\"top-menu\">\n" +
+                        "            <li class=\"nav-item active\"><a class=\"nav-link ms-nav\" href=\"#home\">Home</a></li>\n" +
+                        "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#about\">About</a></li>\n" +
+                        "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#links\">Enlaces</a></li>\n" +
+                        "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#skills\">Habilidades</a></li>\n" +
+                        "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#languages\">Idiomas</a></li>\n" +
+                        "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#education\">Formación</a></li>\n" +
+                        "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#experience\">Experiencia</a></li>\n" +
+                        "            <li class=\"nav-item\"><a class=\"nav-link ms-nav\" href=\"#portfolio\">Portfolio</a></li>\n" +
+                        "        </ul>\n" +
+                        "    </div>\n" +
+                        "</div>\n" +
+                        "<!-- Sidebar End -->\n";
         }
 
+
         private String generateHeroSection(Persona persona) {
-                if (persona == null)
-                        return "";
+                if (persona == null) return "";
 
                 String nombre = persona.getNombre() != null ? persona.getNombre() : "Your Name";
                 String puesto = persona.getPuesto() != null ? persona.getPuesto() : "Your Title";
                 String imagenPerfil = persona.getImagenPerfil() != null ? persona.getImagenPerfil()
-                                : "assets/img/hero/my-img-dark.png";
+                        : "assets/img/hero/my-img-dark.png";
 
                 return "<!-- Hero Start -->\n" +
-                                "<section id=\"home\" class=\"ms-hero margin-b-50\">\n" +
-                                "    <div class=\"ms-diamond-1\"></div>\n" +
-                                "    <div class=\"ms-diamond-2\"></div>\n" +
-                                "    <div class=\"ms-diamond-3\"></div>\n" +
-                                "    <div class=\"ms-diamond-4\"></div>\n" +
-                                "    <div class=\"ms-diamond-5\"></div>\n" +
-                                "    <div class=\"ms-diamond-6\"></div>\n" +
-                                "    <div class=\"container\">\n" +
-                                "        <div class=\"hero-content\">\n" +
-                                "            <div class=\"hero-item static\">\n" +
-                                "                <div class=\"ms-hero-detail\">\n" +
-                                "                    <h2 class=\"ms-hero-title title-right-overflow\">" +
-                                "<span>Hello, <br> I am<br> <span class=\"name\">&nbsp; " +
-                                nombre + "</span></span></h2>\n" +
-                                "                    <p class=\"ms-hero-detail\">" + puesto + "</p>\n" +
-                                "                    <a href=\"#\" class=\"ms-learn-more-right\">\n" +
-                                "                        <span class=\"text\">Download CV</span>\n" +
-                                "                    </a>\n" +
-                                "                </div>\n" +
-                                "                <div class=\"ms-hero-img\" style=\"margin-left: 50px;\">\n" +
-                                "                    <div class=\"ms-card\" data-tilt>\n" +
-                                "                        <img src=\"" + imagenPerfil + "\" alt=\"" + nombre + "\">\n" +
-                                "                    </div>\n" +
-                                "                </div>\n" +
-                                "                <div class=\"ms-hero-name\">\n" +
-                                "                    <h3><span>" + puesto + "</span></h3>\n" +
-                                "                </div>\n" +
-                                "            </div>\n" +
-                                "            <div class=\"art\"></div>\n" +
-                                "        </div>\n" +
-                                "    </div>\n" +
-                                "    <div class=\"scroll-next\" data-scroll=\"about\">\n" +
-                                "        <div class=\"ms-container\">\n" +
-                                "            <span class=\"menu\">\n" +
-                                "                <span class=\"text\"></span>\n" +
-                                "                <span class=\"circle\"></span>\n" +
-                                "            </span>\n" +
-                                "        </div>\n" +
-                                "    </div>\n" +
-                                "</section>\n" +
-                                "<!-- Hero End -->\n";
+                        "<section id=\"home\" class=\"ms-hero margin-b-50\">\n" +
+                        "    <div class=\"ms-diamond-1\"></div>\n" +
+                        "    <div class=\"ms-diamond-2\"></div>\n" +
+                        "    <div class=\"ms-diamond-3\"></div>\n" +
+                        "    <div class=\"ms-diamond-4\"></div>\n" +
+                        "    <div class=\"ms-diamond-5\"></div>\n" +
+                        "    <div class=\"ms-diamond-6\"></div>\n" +
+                        "    <div class=\"container\">\n" +
+                        "        <div class=\"hero-content\">\n" +
+                        "            <div class=\"hero-item static\">\n" +
+                        "                <div class=\"ms-hero-detail\">\n" +
+                        "                    <h2 class=\"ms-hero-title title-right-overflow\">" +
+                        "<span>Hello, <br> I am<br> <span class=\"name\">&nbsp; " + nombre + "</span></span></h2>\n" +
+                        "                    <p class=\"ms-hero-detail\">" + puesto + "</p>\n" +
+                        "                </div>\n" +
+                        "                <div class=\"ms-hero-img\" style=\"margin-left: 50px;\">\n" +
+                        "                    <div class=\"ms-card\" data-tilt>\n" +
+                        "                        <img src=\"" + imagenPerfil + "\" alt=\"" + nombre + "\">\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "                <div class=\"ms-hero-name\">\n" +
+                        "                    <h3><span>" + puesto + "</span></h3>\n" +
+                        "                </div>\n" +
+                        "            </div>\n" +
+                        "            <div class=\"art\"></div>\n" +
+                        "        </div>\n" +
+                        "    </div>\n" +
+                        "    <div class=\"scroll-next\" data-scroll=\"about\">\n" +
+                        "        <div class=\"ms-container\">\n" +
+                        "            <span class=\"menu\">\n" +
+                        "                <span class=\"text\"></span>\n" +
+                        "                <span class=\"circle\"></span>\n" +
+                        "            </span>\n" +
+                        "        </div>\n" +
+                        "    </div>\n" +
+                        "</section>\n" +
+                        "<!-- Hero End -->\n";
         }
+
 
         private String generateAboutSection(Persona persona) {
                 if (persona == null)
@@ -757,6 +751,100 @@ public class PortfolioHTMLGenerator {
 
                 return portfolioSection.toString();
         }
+
+        private String generateLinksSection(List<String> enlaces) {
+                if (enlaces == null || enlaces.isEmpty()) return "";
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("<!-- Links section -->\n")
+                .append("<section id=\"links\" class=\"ms-about padding-tb-80 sec-bg\">\n")
+                .append("  <div class=\"container\">\n")
+                .append("    <div class=\"row\">\n")
+                .append("      <div class=\"section-title\">\n")
+                .append("        <h2>Mis <span>Enlaces</span></h2>\n")
+                .append("        <span class=\"ligh-title\">Enlaces</span>\n")
+                .append("      </div>\n")
+                .append("      <div class=\"col-lg-12\">\n")
+                .append("        <div class=\"row service-box m-tb-minus-15px\">\n");
+
+                int i = 0;
+                String[] icons = { "1.svg", "2.svg", "3.svg", "4.svg" };
+
+                for (String raw : enlaces) {
+                        if (raw == null) continue;
+                        String url = raw.trim();
+                        if (url.isEmpty()) continue;
+
+                        String lower = url.toLowerCase();
+
+                        // Normaliza href (mailto / http(s))
+                        boolean isMail = lower.startsWith("mailto:") || (lower.contains("@") && !lower.startsWith("http"));
+                        String href = isMail ? (lower.startsWith("mailto:") ? url : "mailto:" + url)
+                                        : ((lower.startsWith("http://") || lower.startsWith("https://")) ? url : "https://" + url);
+
+                        // Label “bonito” según dominio
+                        String label;
+                        if (isMail) label = "Email";
+                        else if (lower.contains("github.com")) label = "GitHub";
+                        else if (lower.contains("linkedin.com")) label = "LinkedIn";
+                        else if (lower.contains("gitlab.com")) label = "GitLab";
+                        else if (lower.contains("twitter.com") || lower.contains("x.com")) label = "X / Twitter";
+                        else label = "Web";
+
+                        // Texto “bonito” para mostrar
+                        String pretty = href.replace("https://", "").replace("http://", "");
+                        if (pretty.startsWith("mailto:")) pretty = pretty.substring(7);
+
+                        String hostOrFirst = pretty;
+                        int slash = hostOrFirst.indexOf('/');
+                        if (slash > 0) hostOrFirst = hostOrFirst.substring(0, slash);
+
+                        String icon = icons[i % icons.length];
+                        i++;
+
+                        String target = isMail ? "" : " target=\"_blank\" rel=\"noopener noreferrer\"";
+
+                        sb.append("          <div class=\"col-lg-6 col-md-6 col-xs-12\">\n")
+                        .append("            <div class=\"flipper\">\n")
+                        .append("              <div class=\"main-box\">\n")
+                        .append("                <div class=\"box-front height-300 white-bg\">\n")
+                        .append("                  <div class=\"content-wrap\">\n")
+                        .append("                    <div class=\"icon\">\n")
+                        .append("                      <img class=\"icofont icofont-headphone-alt font-40px dark-color svg_img\" ")
+                        .append("src=\"assets/img/service/").append(icon).append("\" alt=\"link\">\n")
+                        .append("                    </div>\n")
+                        .append("                    <h3>").append(label).append("</h3>\n")
+                        .append("                    <p>").append(hostOrFirst).append("</p>\n")
+                        .append("                    <a class=\"ms-learn-more\" href=\"").append(href).append("\"").append(target).append(">\n")
+                        .append("                      <span class=\"text\">Abrir</span>\n")
+                        .append("                    </a>\n")
+                        .append("                  </div>\n")
+                        .append("                </div>\n")
+                        .append("                <div class=\"box-back height-300 gradient-bg\">\n")
+                        .append("                  <div class=\"content-wrap\">\n")
+                        .append("                    <h3>").append(label).append("</h3>\n")
+                        .append("                    <p>").append(pretty).append("</p>\n")
+                        .append("                    <a class=\"ms-learn-more\" href=\"").append(href).append("\"").append(target).append(">\n")
+                        .append("                      <span class=\"text\">Abrir</span>\n")
+                        .append("                    </a>\n")
+                        .append("                  </div>\n")
+                        .append("                </div>\n")
+                        .append("              </div>\n")
+                        .append("            </div>\n")
+                        .append("          </div>\n");
+                }
+
+                sb.append("        </div>\n")   // row service-box
+                .append("      </div>\n")     // col
+                .append("    </div>\n")       // row
+                .append("  </div>\n")         // container
+                .append("</section>\n")
+                .append("<!-- Links section End -->\n");
+
+                return sb.toString();
+        }
+
 
         private String generateCounterSection(List<ExperienciaItem> experiencia, List<Proyecto> portfolio) {
                 return "";
