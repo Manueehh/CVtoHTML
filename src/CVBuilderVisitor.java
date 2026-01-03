@@ -4,11 +4,13 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import model.*;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
 
     private final Set<String> identificadores = new HashSet<>();
     private final List<String> warnings = new ArrayList<>();
     private final List<String> errors = new ArrayList<>();
+    private boolean no_generar = false;
 
     public List<String> getWarnings() {
         return warnings;
@@ -79,7 +81,12 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         String identificador = ctx.IDENTIFICADOR().getText();
 
         if (!identificadores.add(identificador)) {
-            warn(ctx, "Duplicate CV identifier: " + identificador);
+            error(ctx, "Duplicate CV identifier: " + identificador);
+            no_generar = true;
+        }
+        if (no_generar == true) {
+            System.out.println("Error, identificador de CV duplicado: "+identificador);
+            System.exit(0);
         }
 
         Persona persona = (Persona) visitInformacion_personal(ctx.informacion_personal());
@@ -137,7 +144,9 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
             ubicacion = resolveVariable(campos.ubicacion().IDENTIFICADOR().getText());
         }
         String email = campos.email().CORREO().getText();
-        if (email != null && !email.contains("@")) {
+        if (email != null && !email.contains("@") && 
+        (!email.endsWith(".com") || !email.endsWith(".es") || !email.endsWith(".net")
+        || !email.endsWith(".co"))) {
             warn(ctx, "Email no valido: " + email);
         }
         String telefono = campos.telefono().TELEFONO_VALOR().getText();
@@ -153,7 +162,7 @@ public class CVBuilderVisitor extends CVParserBaseVisitor<Object> {
         }
         if (fechaNacimiento != null) {
             Integer fecha_numero = Integer.parseInt(fechaNacimiento.split("-")[2]);
-            if (fecha_numero < 1920 || fecha_numero > 2025) {
+            if (fecha_numero < 1920 || fecha_numero > Year.now().getValue()) {
                 warn(ctx, "Fecha de nacimiento no valida: " + fechaNacimiento);
             }
         }

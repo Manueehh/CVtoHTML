@@ -12,13 +12,13 @@ public class MainCup {
             LexerCup lexer = new LexerCup(reader);
 
             CupParser parser = new CupParser(lexer);
-            System.out.println("=== Iniciando parsing con JFlex + CUP ===");
+            System.out.println("Iniciando parsing con JFlex + CUP");
             Symbol result = parser.parse();
 
             if (result != null && result.value != null) {
-                System.out.println("✓ Parsing completado exitosamente!");
+                System.out.println("Parsing completado exitosamente");
             } else {
-                System.out.println("✓ Parsing completado (sin errores sintácticos)");
+                System.out.println("Parsing completado (sin errores sintácticos)");
             }
 
             CvProcessor.Result procesado = CvProcessor.parseWithAntlr(archivoEntrada);

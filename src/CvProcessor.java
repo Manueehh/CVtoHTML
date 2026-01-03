@@ -67,13 +67,13 @@ public final class CvProcessor {
             String identificador = cv.getIdentificador();
             String filename = outputDir + "/portfolio_" + identificador + ".html";
 
-            System.out.println("\\nGenerando portfolio para: " + identificador);
+            System.out.println("Generando portfolio para: " + identificador);
 
             try {
                 generator.saveToFile(cv, filename);
-                System.out.println("✓ Portfolio HTML generado: " + Paths.get(filename).toAbsolutePath());
+                System.out.println("Portfolio HTML generado: " + Paths.get(filename).toAbsolutePath());
             } catch (Exception e) {
-                System.err.println("✗ Error generando portfolio para " + identificador + ": " + e.getMessage());
+                System.err.println("Error generando portfolio para " + identificador + ": " + e.getMessage());
                 e.printStackTrace();
             }
         }

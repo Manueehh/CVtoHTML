@@ -13,9 +13,7 @@ public class Main {
             String archivoEntrada = "data/cv_entradas.txt";
             String outputDir = "data/portfolios";
 
-            System.out.println(repeat("=", 60));
             System.out.println("CV to HTML Portfolio Generator");
-            System.out.println(repeat("=", 60));
             System.out.println("Archivo de entrada: " + archivoEntrada);
             System.out.println("Directorio de salida: " + outputDir);
 
@@ -29,14 +27,10 @@ public class Main {
             // 3. Generar portfolios HTML
             CvProcessor.renderToHTML(result, outputDir);
 
-            System.out.println("\\n" + repeat("=", 60));
-            System.out.println("✓ Proceso completado exitosamente!");
-            System.out.println(repeat("=", 60));
+            System.out.println("Proceso completado exitosamente!");
 
         } catch (Exception e) {
-            System.err.println("\\n" + repeat("=", 60));
-            System.err.println("✗ Error durante el procesamiento:");
-            System.err.println(repeat("=", 60));
+            System.err.println("Error durante el procesamiento");
             e.printStackTrace();
         }
     }

@@ -95,7 +95,7 @@ CV {
 // CV MANUEL
 // ==========================
 CV { 
-    CVMANUEL
+    CVRUBEN
     /* Comentario multilínea CV 1 */
     seccion(Información_personal) {
         Persona(
