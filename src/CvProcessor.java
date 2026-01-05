@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import model.*;
+import util.CustomErrorListener;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,15 +39,37 @@ public final class CvProcessor {
     public static Result parseWithAntlr(String archivoEntrada) throws IOException {
         CharStream input = CharStreams.fromFileName(archivoEntrada);
         LexerPersona lexer = new LexerPersona(input);
+
+        lexer.removeErrorListeners();
+        CustomErrorListener lexerErrorListener = new CustomErrorListener();
+        lexer.addErrorListener(lexerErrorListener);
+
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CVParser parser = new CVParser(tokens);
 
+        parser.removeErrorListeners();
+        CustomErrorListener parserErrorListener = new CustomErrorListener();
+        parser.addErrorListener(parserErrorListener);
+
         ParseTree tree = parser.cv_grupo();
+
+        if (lexerErrorListener.hasErrors() || parserErrorListener.hasErrors()) {
+            System.err.println("\nEl archivo contiene errores de sintaxis.");
+            System.err.println("No se generará HTML debido a los errores encontrados.\n");
+            throw new RuntimeException("Errores de sintaxis detectados");
+        }
 
         CVBuilderVisitor visitor = new CVBuilderVisitor();
         List<CV> cvs = visitor.visitCv_grupo((CVParser.Cv_grupoContext) tree);
         Map<String, String> variables = visitor.getVariablesGlobales();
         visitor.getWarnings().forEach(System.out::println);
+
+        if (!visitor.getErrors().isEmpty()) {
+            System.err.println("\nErrores semánticos detectados:");
+            visitor.getErrors().forEach(System.err::println);
+            throw new RuntimeException("Errores semánticos detectados");
+        }
+
         return new Result(cvs, variables);
     }
 

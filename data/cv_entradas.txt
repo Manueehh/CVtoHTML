@@ -10,7 +10,7 @@ GLOBAL {
 CV { 
     CVRUBEN
     /* Comentario multilínea CV */
-    seccion(Información_personal) {
+    seccion(Información_personal) {,
         Persona(
             Nombre: "Rubén Alaminos";
             Puesto: "Estudiante";

@@ -15,10 +15,16 @@ public class MainCup {
             System.out.println("Iniciando parsing con JFlex + CUP");
             Symbol result = parser.parse();
 
+            if (parser.hasErrors()) {
+                System.err.println("\nEl archivo contiene errores.");
+                System.err.println("No se generará HTML debido a los errores encontrados.");
+                System.exit(1);
+            }
+
             if (result != null && result.value != null) {
-                System.out.println("Parsing completado exitosamente");
+                System.out.println("✅ Parsing completado exitosamente");
             } else {
-                System.out.println("Parsing completado (sin errores sintácticos)");
+                System.out.println("✅ Parsing completado (sin errores sintácticos)");
             }
 
             CvProcessor.Result procesado = CvProcessor.parseWithAntlr(archivoEntrada);
